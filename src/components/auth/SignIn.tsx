@@ -17,7 +17,7 @@ const SignIn = () => {
     });
 
     const defaultValues = {
-        email: '',
+        email: '2323',
         password: ""
     };
 
@@ -39,7 +39,6 @@ const SignIn = () => {
             console.error(error);
         }
     });
-
     console.log(methods.getValues());
 
     return (

@@ -15,17 +15,17 @@ export default function RHFTextField({ name, helperText, type, ...other }: Props
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => (
+      render={({ field: { value, ...restField }, fieldState: { error } }) => (
         <TextField
-          {...field}
+          {...restField}
           fullWidth
           type={type}
-          value={type === 'number' && field.value === 0 ? '' : field.value}
+          defaultValue={value}
           onChange={(event) => {
             if (type === 'number') {
-              field.onChange(Number(event.target.value));
+              restField.onChange(Number(event.target.value));
             } else {
-              field.onChange(event.target.value);
+              restField.onChange(event.target.value);
             }
           }}
           error={!!error}

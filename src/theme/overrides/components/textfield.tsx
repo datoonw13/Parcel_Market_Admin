@@ -71,6 +71,10 @@ export function textField(theme: Theme) {
             opacity: 1,
             color: color.placeholder,
           },
+          '&:-webkit-autofill': {
+            transitionDelay: '9999s',
+            transitionProperty: 'background-color, color',
+          },
         },
       },
     },
