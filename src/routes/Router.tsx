@@ -4,7 +4,7 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 import AuthGuard from 'src/guards/AuthGuard';
 import GuestGuard from 'src/guards/GuestGuard';
 import GuestLayout from 'src/layouts/GuestLayout';
-import AuthedLayout from 'src/layouts/dashboard/AuthedLayout';
+import AuthedLayout from 'src/layouts/authed-layout/AuthedLayout';
 
 import SplashLoading from 'src/components/loading/SplashLoading';
 
@@ -17,7 +17,7 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
         {
             path: '/',
             element: <Suspense fallback={<SplashLoading />}>
-                <Navigate to="dashboard" replace />
+                <Navigate to="users" replace />
                 <AuthGuard getUserLoading={getUserLoading}>
                     <AuthedLayout>
                         <Outlet />
@@ -26,8 +26,8 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
             </Suspense>,
             children: [
                 {
-                    path: 'dashboard',
-                    element: <p>qwdqwd</p>,
+                    path: 'users',
+                    element: <p>users</p>,
                 },
             ]
         },

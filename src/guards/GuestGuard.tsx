@@ -14,7 +14,7 @@ const GuestGuard = ({ children, getUserLoading }: IGuestGuard) => {
     const isAuthed = useAppSelector(selectAuthedUser)
 
     if (isAuthed && !getUserLoading) {
-        return <Navigate to="/dashboard" replace />
+        return <Navigate to="/" replace />
     }
 
     return (
