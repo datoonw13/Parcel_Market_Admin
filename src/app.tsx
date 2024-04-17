@@ -11,33 +11,36 @@ import ThemeProvider from 'src/theme';
 import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
+import { Provider } from 'react-redux';
 import Router from './routes/Router';
-
+import { makeStore } from './lib/store';
 // ----------------------------------------------------------------------
 
 export default function App() {
+  const store = makeStore()
 
   useScrollToTop();
 
   return (
-
-    <SettingsProvider
-      defaultSettings={{
-        themeMode: 'light', // 'light' | 'dark'
-        themeDirection: 'ltr', //  'rtl' | 'ltr'
-        themeContrast: 'default', // 'default' | 'bold'
-        themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-        themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-        themeStretch: false,
-      }}
-    >
-      <ThemeProvider>
-        <MotionLazy>
-          <SettingsDrawer />
-          <ProgressBar />
-          <Router />
-        </MotionLazy>
-      </ThemeProvider>
-    </SettingsProvider>
+    <Provider store={store}>
+      <SettingsProvider
+        defaultSettings={{
+          themeMode: 'light', // 'light' | 'dark'
+          themeDirection: 'ltr', //  'rtl' | 'ltr'
+          themeContrast: 'default', // 'default' | 'bold'
+          themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+          themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+          themeStretch: false,
+        }}
+      >
+        <ThemeProvider>
+          <MotionLazy>
+            <SettingsDrawer />
+            <ProgressBar />
+            <Router />
+          </MotionLazy>
+        </ThemeProvider>
+      </SettingsProvider>
+    </Provider>
   );
 }

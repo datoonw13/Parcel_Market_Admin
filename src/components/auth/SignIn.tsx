@@ -7,12 +7,14 @@ import { Stack, IconButton, Typography, InputAdornment } from '@mui/material';
 
 import { ISignIn } from 'src/@types/auth';
 import { signInSchema } from 'src/validations/auth-validations';
+import { useSignInMutation } from 'src/lib/features/apis/authApi';
 
 import Iconify from '../iconify/iconify';
 import { RHFTextField } from '../hook-form';
 import FormProvider from '../hook-form/FormProvider';
 
 const SignIn = () => {
+    const [signIn] = useSignInMutation()
     const [showPassword, setShowPassword] = useState(false)
 
     const methods = useForm<ISignIn>({
@@ -30,7 +32,7 @@ const SignIn = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            console.info('DATA', data);
+            await signIn(data).unwrap()
         } catch (error) {
             console.error(error);
         }

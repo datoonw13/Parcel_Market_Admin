@@ -3,7 +3,7 @@ import { Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://api.parcelmarket.com/api/",
+  baseUrl: "https://api.parcelmarket.com/api/admin",
   prepareHeaders: async (headers) => {
     headers.set("authorization", `Bearer ${localStorage.getItem("token")}`);
     return headers;
