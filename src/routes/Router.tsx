@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
+import UsersList from 'src/pages/UsersList';
 import AuthGuard from 'src/guards/AuthGuard';
 import GuestGuard from 'src/guards/GuestGuard';
 import GuestLayout from 'src/layouts/GuestLayout';
@@ -27,7 +28,7 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
             children: [
                 {
                     path: 'users',
-                    element: <p>users</p>,
+                    element: <UsersList />,
                 },
             ]
         },
