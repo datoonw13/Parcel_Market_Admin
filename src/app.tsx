@@ -11,6 +11,8 @@ import ThemeProvider from 'src/theme';
 import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
+import { GlobalStyles } from '@mui/material';
+import Router from './routes/Router';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +21,7 @@ export default function App() {
   useScrollToTop();
 
   return (
+
     <SettingsProvider
       defaultSettings={{
         themeMode: 'light', // 'light' | 'dark'
@@ -29,11 +32,16 @@ export default function App() {
         themeStretch: false,
       }}
     >
+      <GlobalStyles styles={{
+        '@keyframes mui-auto-fill': { '100%': { display: 'none' } },
+        '@keyframes mui-auto-fill-cancel': { '100%': { display: 'none' } },
+      }} />
       <ThemeProvider>
+
         <MotionLazy>
           <SettingsDrawer />
           <ProgressBar />
-          ae
+          <Router />
         </MotionLazy>
       </ThemeProvider>
     </SettingsProvider>
