@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from "react"
-import { useLocation } from "react-router"
 
 import { useLazyGetUserQuery } from "src/lib/features/apis/authApi"
 
 const useAuthCheck = () => {
-    const {pathname} = useLocation()
     const token = localStorage.getItem('token')
     const [loading, setLoading] = useState(!!token)
     const [getUser, {isLoading: getUserLoading}] = useLazyGetUserQuery()
