@@ -5,11 +5,11 @@ import api from "./baseApi";
 
 const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getUsers: build.query<ResponseType<IUser>, void>({
+    getUsers: build.query<ResponseType<IUser[]>, {page: number, pageSize: number}>({
       query: (arg) => ({
         url: "admin/users",
         method: "GET",
-        body: arg,
+        params: arg,
       }),
     }),
   }),
