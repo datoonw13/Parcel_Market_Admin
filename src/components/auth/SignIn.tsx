@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,24 +5,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Stack, IconButton, Typography, InputAdornment } from '@mui/material';
 
+import { ISignIn } from 'src/@types/auth';
+import { signInSchema } from 'src/validations/auth-validations';
+
 import Iconify from '../iconify/iconify';
 import { RHFTextField } from '../hook-form';
 import FormProvider from '../hook-form/FormProvider';
 
 const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false)
-    const ForgotPasswordSchema = Yup.object().shape({
-        email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    });
 
-    const defaultValues = {
-        email: '2323',
-        password: ""
-    };
-
-    const methods = useForm({
-        resolver: yupResolver(ForgotPasswordSchema),
-        defaultValues,
+    const methods = useForm<ISignIn>({
+        resolver: yupResolver(signInSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        },
     });
 
     const {
@@ -33,13 +30,11 @@ const SignIn = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await new Promise((resolve) => setTimeout(resolve, 500));
             console.info('DATA', data);
         } catch (error) {
             console.error(error);
         }
     });
-    console.log(methods.getValues());
 
     return (
         <FormProvider methods={methods} onSubmit={onSubmit}>
