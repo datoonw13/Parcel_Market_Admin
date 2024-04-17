@@ -1,14 +1,13 @@
 import NProgress from 'nprogress';
+import { useLocation } from 'react-router';
 import { useState, useEffect } from 'react';
-
-import { usePathname } from 'src/routes/hooks';
 
 import StyledProgressBar from './styles';
 
 // ----------------------------------------------------------------------
 
 export default function ProgressBar() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const [mounted, setMounted] = useState(false);
 
