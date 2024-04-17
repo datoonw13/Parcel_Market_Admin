@@ -2,11 +2,11 @@ import { ReactNode } from 'react'
 
 import { Box, Card } from '@mui/material'
 
-interface IAuthLayout {
+interface IGuestLayout {
     children: ReactNode
 }
 
-const AuthLayout = ({ children }: IAuthLayout) => (
+const GuestLayout = ({ children }: IGuestLayout) => (
     <Box
         component="main"
         sx={{
@@ -45,4 +45,4 @@ const AuthLayout = ({ children }: IAuthLayout) => (
     </Box>
 )
 
-export default AuthLayout
+export default GuestLayout
