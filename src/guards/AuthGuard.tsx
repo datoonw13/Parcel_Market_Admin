@@ -1,15 +1,19 @@
 import { ReactNode } from "react"
 import { Navigate } from "react-router"
 
+import { useAppSelector } from "src/lib/hooks"
+import { selectAuthedUser } from "src/lib/features/apis/authApi"
+
 interface IAuthGuard {
-    children: ReactNode
+    children: ReactNode;
+    getUserLoading: boolean;
 }
 
 
-const AuthGuard = ({ children }: IAuthGuard) => {
-    const isAuthed = true
+const AuthGuard = ({ children, getUserLoading }: IAuthGuard) => {
+    const isAuthed = useAppSelector(selectAuthedUser)
 
-    if (!isAuthed) {
+    if (!isAuthed && !getUserLoading) {
         return <Navigate to="/auth" replace />
     }
 

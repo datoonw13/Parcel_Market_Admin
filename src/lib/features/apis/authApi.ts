@@ -2,13 +2,21 @@ import { IUser, ISignIn } from "src/@types/auth";
 import { ResponseType } from "src/@types/common";
 
 import api from "./baseApi";
+import { createSelector } from "@reduxjs/toolkit";
 
 const authApi = api.injectEndpoints({
   endpoints: (build) => ({
     signIn: build.mutation<ResponseType<{access_token: string, payload: IUser}>, ISignIn>({
       query: (arg) => ({
-        url: "auth",
+        url: "admin/auth",
         method: "POST",
+        body: arg,
+      }),
+    }),
+    getUser: build.query<ResponseType<IUser>, void>({
+      query: (arg) => ({
+        url: "user/profile",
+        method: "GET",
         body: arg,
       }),
     }),
@@ -16,6 +24,9 @@ const authApi = api.injectEndpoints({
 });
 
 export const {
-  useSignInMutation
+  useSignInMutation,
+  useLazyGetUserQuery
 } = authApi;
 export default authApi;
+
+export const selectAuthedUser = createSelector(authApi.endpoints.getUser.select(), (res) => res?.data?.data);

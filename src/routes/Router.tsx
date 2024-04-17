@@ -11,26 +11,29 @@ import SplashLoading from 'src/components/loading/SplashLoading';
 const SignIn = lazy(() => import('src/components/auth/SignIn'));
 
 
-export default function Router() {
+export default function Router({ getUser, getUserLoading }: { getUser: () => void, getUserLoading: boolean }) {
     return useRoutes([
         {
             path: '/',
             element: <Suspense fallback={<SplashLoading />}>
                 <Navigate to="dashboard" replace />
-                <AuthGuard>
+                <AuthGuard getUserLoading={getUserLoading}>
                     <Outlet />
                 </AuthGuard>
             </Suspense>,
+            children: [
+                {
+                    path: 'dashboard',
+                    element: <p>qwdqwd</p>,
+                },
+            ]
         },
-        {
-            path: 'dashboard',
-            element: <p>qwdqwd</p>,
-        },
+
         {
             path: 'auth',
             element: <Suspense fallback={<SplashLoading />}>
                 <Navigate to="sign-in" replace />
-                <GuestGuard>
+                <GuestGuard getUserLoading={getUserLoading}>
                     <AuthLayout>
                         <Outlet />
                     </AuthLayout>
@@ -39,7 +42,7 @@ export default function Router() {
             children: [
                 {
                     path: 'sign-in',
-                    element: <SignIn />
+                    element: <SignIn getUser={getUser} getUserLoading={getUserLoading} />
                 },
                 {
                     path: '*',

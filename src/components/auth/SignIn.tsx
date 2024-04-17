@@ -13,7 +13,7 @@ import Iconify from '../iconify/iconify';
 import { RHFTextField } from '../hook-form';
 import FormProvider from '../hook-form/FormProvider';
 
-const SignIn = () => {
+const SignIn = ({ getUser, getUserLoading }: { getUser: () => void, getUserLoading: boolean }) => {
     const [signIn] = useSignInMutation()
     const [showPassword, setShowPassword] = useState(false)
 
@@ -32,7 +32,9 @@ const SignIn = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await signIn(data).unwrap()
+            const res = await signIn(data).unwrap()
+            localStorage.setItem('token', res.data.access_token)
+            getUser()
         } catch (error) {
             console.error(error);
         }
@@ -64,7 +66,7 @@ const SignIn = () => {
                     size="large"
                     type="submit"
                     variant="contained"
-                    loading={isSubmitting}
+                    loading={isSubmitting || getUserLoading}
                 >
                     Login
                 </LoadingButton>

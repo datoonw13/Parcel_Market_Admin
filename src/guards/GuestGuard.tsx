@@ -1,15 +1,19 @@
 import { ReactNode } from "react"
 import { Navigate } from "react-router"
 
+import { useAppSelector } from "src/lib/hooks"
+import { selectAuthedUser } from "src/lib/features/apis/authApi"
+
 interface IGuestGuard {
-    children: ReactNode
+    children: ReactNode;
+    getUserLoading: boolean
 }
 
 
-const GuestGuard = ({ children }: IGuestGuard) => {
-    const isAuthed = false
+const GuestGuard = ({ children, getUserLoading }: IGuestGuard) => {
+    const isAuthed = useAppSelector(selectAuthedUser)
 
-    if (isAuthed) {
+    if (isAuthed && !getUserLoading) {
         return <Navigate to="/dashboard" replace />
     }
 
