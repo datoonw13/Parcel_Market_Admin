@@ -59,13 +59,10 @@ const SignIn = () => {
                 />
                 <LoadingButton
                     fullWidth
-                    color="inherit"
                     size="large"
                     type="submit"
                     variant="contained"
                     loading={isSubmitting}
-                    endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
-                    sx={{ justifyContent: 'space-between', pl: 2, pr: 1.5 }}
                 >
                     Login
                 </LoadingButton>
