@@ -2,6 +2,8 @@
 import { Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+import SnackbarUtils from 'src/utils/snackbar'
+
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://api.parcelmarket.com/api/",
   prepareHeaders: async (headers) => {
@@ -19,7 +21,7 @@ export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) =
     if (typeof action?.payload?.data?.message === "object") {
       errorMessage = action?.payload?.data?.message[0];
     }
-    // toast.error(errorMessage);
+    SnackbarUtils.error(errorMessage)
   }
 
   return next(action);

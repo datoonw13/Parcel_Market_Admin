@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import { alpha } from '@mui/material/styles';
@@ -10,15 +9,21 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+import { useAppDispatch, useAppSelector } from 'src/lib/hooks';
+import authApi, { selectAuthedUser } from 'src/lib/features/apis/authApi';
+
 import CustomPopover from 'src/components/custom-popover/custom-popover';
 
 
 export default function AccountPopover() {
+  const authedUser = useAppSelector(selectAuthedUser)
+  const dispatch = useAppDispatch()
   const [open, setOpen] = useState<HTMLElement | null>(null)
 
 
   const handleLogout = async () => {
-
+    dispatch(authApi.util.resetApiState())
+    localStorage.removeItem('token')
   };
 
   return (
@@ -47,28 +52,28 @@ export default function AccountPopover() {
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          L
+          {authedUser?.name[0]}
         </Avatar>
       </IconButton>
 
       <CustomPopover open={open} onClose={() => setOpen(null)} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            aee
+            {authedUser?.name}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            avoie
+            {authedUser?.role}
           </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Stack sx={{ p: 1 }}>
+        {/* <Stack sx={{ p: 1 }}>
           <MenuItem>
             label
           </MenuItem>
-        </Stack>
+        </Stack> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
