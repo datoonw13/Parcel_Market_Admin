@@ -50,6 +50,7 @@ export function useNavData() {
         subheader: 'Navigation',
         items: [
           { title: 'Users', path: paths.dashboard.users, icon: ICONS.user },
+          { title: 'Properties', path: paths.dashboard.propertiesSearch, icon: ICONS.analytics },
         ],
       },
     ],

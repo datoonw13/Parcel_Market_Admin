@@ -1,0 +1,21 @@
+export interface IPropertySearch {
+        "id": number,
+        "state": string,
+        "county": string,
+        "parcelNumber": string,
+        "waterFeature": boolean,
+        "waterFront": boolean,
+        "langCoverType": string,
+        "propertyCondition": string,
+        "wetProperty": string,
+        "propertyRestriction": string,
+        "legalDescription": string | null,
+        "apiOwnerName": string | null,
+        "lotSize": string | null,
+        "salePrice": string | null,
+        "saleYear": string | null,
+        "propertyAccess": string,
+        "improvementsValue": string,
+        "price": string,
+        "dateCreated": Date
+}

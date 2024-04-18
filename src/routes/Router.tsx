@@ -6,6 +6,7 @@ import AuthGuard from 'src/guards/AuthGuard';
 import GuestGuard from 'src/guards/GuestGuard';
 import GuestLayout from 'src/layouts/GuestLayout';
 import AuthedLayout from 'src/layouts/authed-layout/AuthedLayout';
+import PropertiesSearchList from 'src/pages/PropertiesSearchList';
 
 import SplashLoading from 'src/components/loading/SplashLoading';
 
@@ -18,7 +19,7 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
         {
             path: '/',
             element: <Suspense fallback={<SplashLoading />}>
-                <Navigate to="users" replace />
+                {/* <Navigate to="users" replace /> */}
                 <AuthGuard getUserLoading={getUserLoading}>
                     <AuthedLayout>
                         <Outlet />
@@ -29,6 +30,10 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
                 {
                     path: 'users',
                     element: <UsersList />,
+                },
+                {
+                    path: 'properties-search',
+                    element: <PropertiesSearchList />,
                 },
             ]
         },
