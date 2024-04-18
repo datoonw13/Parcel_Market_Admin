@@ -1,11 +1,11 @@
 import { IUser } from "src/@types/auth";
-import { ResponseType } from "src/@types/common";
+import { IPagination, ResponseType } from "src/@types/common";
 
 import api from "./baseApi";
 
 const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getUsers: build.query<ResponseType<IUser[]>, {page: number, pageSize: number}>({
+    getUsers: build.query<ResponseType<{users: IUser[], pagination: IPagination}>, {page: number, pageSize: number}>({
       query: (arg) => ({
         url: "admin/users",
         method: "GET",

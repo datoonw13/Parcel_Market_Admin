@@ -8,5 +8,8 @@ export interface IUser {
     "sub": number,
     "name": string,
     "email": string,
-    "role": "admin"
+    "role": 'admin' | 'user',
+    county: string,
+    state: string,
+    mailingAddress: string
 }

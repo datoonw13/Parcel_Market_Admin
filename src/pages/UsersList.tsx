@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, Table, Stack, Container, TableBody, TextField, TableContainer, InputAdornment } from '@mui/material'
+import { Card, Table, Stack, TableRow, Container, TableBody, TextField, TableCell, TableContainer, InputAdornment } from '@mui/material'
 
 import { useGetUsersQuery } from 'src/lib/features/apis/usersApi';
 
@@ -8,16 +8,15 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
-import { useTable, emptyRows, TableNoData, TableEmptyRows, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
+import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
 
 
 const TABLE_HEAD = [
     { id: 'name', label: 'Name' },
-    { id: 'phoneNumber', label: 'Phone Number', width: 180 },
-    { id: 'company', label: 'Company', width: 220 },
-    { id: 'role', label: 'Role', width: 180 },
-    { id: 'status', label: 'Status', width: 100 },
-    { id: '', width: 88 },
+    { id: 'role', label: 'role', width: 180 },
+    { id: 'county', label: 'county', width: 220 },
+    { id: 'state', label: 'state', width: 180 },
+    { id: 'mailingAddress', label: 'mailingAddress', width: 100 },
 ];
 
 
@@ -25,7 +24,7 @@ const UsersList = () => {
     const settings = useSettingsContext();
     const table = useTable();
     const { data, isSuccess } = useGetUsersQuery({ page: table.page + 1, pageSize: table.rowsPerPage })
-    const notFound = isSuccess && data?.data.length === 0;
+    const notFound = isSuccess && data?.data.users.length === 0;
     const denseHeight = table.dense ? 56 : 56 + 20;
 
     return (
@@ -56,21 +55,23 @@ const UsersList = () => {
                         <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }} >
                             <TableHeadCustom
                                 headLabel={TABLE_HEAD}
-                                rowCount={data?.data.length || 0}
+                                rowCount={data?.data.users.length || 0}
                             />
                             <TableBody>
-                                <TableEmptyRows
-                                    height={denseHeight}
-                                    emptyRows={emptyRows(table.page, table.rowsPerPage, data?.data?.length || 0)}
-                                />
-
+                                {data?.data.users.map(el => <TableRow hover key={el.id}>
+                                    <TableCell>{el.name}</TableCell>
+                                    <TableCell>{el.role}</TableCell>
+                                    <TableCell>{el.county}</TableCell>
+                                    <TableCell>{el.state}</TableCell>
+                                    <TableCell>{el.mailingAddress}</TableCell>
+                                </TableRow>)}
                                 <TableNoData notFound={notFound} />
                             </TableBody>
                         </Table>
                     </Scrollbar>
                 </TableContainer>
                 <TablePaginationCustom
-                    count={data?.data?.length || 0}
+                    count={data?.data?.pagination.totalCount || 0}
                     page={table.page}
                     rowsPerPage={table.rowsPerPage}
                     onPageChange={table.onChangePage}

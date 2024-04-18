@@ -4,3 +4,7 @@ export interface ResponseType<T> {
     message: string;
     statusCode: number;
   }
+
+  export interface IPagination {
+    totalCount: number
+  }
