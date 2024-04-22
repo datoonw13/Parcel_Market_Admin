@@ -13,6 +13,7 @@ import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 's
 
 const TABLE_HEAD = [
     { id: 'name', label: 'Name' },
+    { id: 'email', label: 'Email' },
     { id: 'role', label: 'role', width: 180 },
     { id: 'county', label: 'county', width: 220 },
     { id: 'state', label: 'state', width: 180 },
@@ -25,7 +26,6 @@ const UsersList = () => {
     const table = useTable();
     const { data, isSuccess } = useGetUsersQuery({ page: table.page + 1, pageSize: table.rowsPerPage })
     const notFound = isSuccess && data?.data.users.length === 0;
-    const denseHeight = table.dense ? 56 : 56 + 20;
 
     return (
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -60,6 +60,7 @@ const UsersList = () => {
                             <TableBody>
                                 {data?.data.users.map(el => <TableRow hover key={el.id}>
                                     <TableCell>{el.name}</TableCell>
+                                    <TableCell>{el.email}</TableCell>
                                     <TableCell>{el.role}</TableCell>
                                     <TableCell>{el.county}</TableCell>
                                     <TableCell>{el.state}</TableCell>

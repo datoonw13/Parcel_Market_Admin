@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-import { IUser, ISignIn } from "src/@types/auth";
+import { IUser } from "src/@types/users";
+import { ISignIn } from "src/@types/auth";
 import { ResponseType } from "src/@types/common";
 
 import api from "./baseApi";
