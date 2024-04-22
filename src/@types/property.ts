@@ -17,5 +17,6 @@ export interface IPropertySearch {
         "propertyAccess": string,
         "improvementsValue": string,
         "price": string,
-        "dateCreated": Date
+        "dateCreated": Date,
+        user?: {email?: string}
 }

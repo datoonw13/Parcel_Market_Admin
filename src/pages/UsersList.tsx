@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import { Card, Table, Stack, TableRow, Container, TableBody, TextField, TableCell, TableContainer, InputAdornment } from '@mui/material'
 
@@ -22,10 +22,29 @@ const TABLE_HEAD = [
 
 
 const UsersList = () => {
+    const ref = useRef<ReturnType<typeof setTimeout>>()
     const settings = useSettingsContext();
+    const [search, setSearch] = useState<string | null>(null)
     const table = useTable();
-    const { data, isSuccess } = useGetUsersQuery({ page: table.page + 1, pageSize: table.rowsPerPage })
+    const { data, isSuccess } = useGetUsersQuery({ page: table.page + 1, pageSize: table.rowsPerPage, search })
     const notFound = isSuccess && data?.data.users.length === 0;
+
+    const handleSearch = (value: string) => {
+        if (ref.current) {
+            window.clearTimeout(ref.current)
+        }
+        ref.current = setTimeout(() => {
+            setSearch(value || null)
+        }, 300)
+    }
+
+
+    useEffect(() => () => {
+        if (ref.current) {
+            window.clearTimeout(ref.current)
+        }
+    }, [])
+
 
     return (
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -40,7 +59,8 @@ const UsersList = () => {
                 <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1, p: 2 }}>
                     <TextField
                         fullWidth
-                        placeholder="Search..."
+                        placeholder="Search by name or email"
+                        onChange={e => handleSearch(e.target.value)}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">

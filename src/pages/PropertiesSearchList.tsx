@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import { Card, Table, Stack, TableRow, Container, TableBody, TextField, TableCell, TableContainer, InputAdornment } from '@mui/material'
 
@@ -12,6 +12,7 @@ import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 's
 
 
 const TABLE_HEAD = [
+    { id: 'user', label: 'User' },
     { id: 'owner', label: 'owner/parcel' },
     { id: 'state', label: 'state', width: 180 },
     { id: 'county', label: 'county', width: 220 },
@@ -20,15 +21,33 @@ const TABLE_HEAD = [
 
 
 const PropertiesSearchList = () => {
+    const ref = useRef<ReturnType<typeof setTimeout>>()
+    const [search, setSearch] = useState<string | null>(null)
     const settings = useSettingsContext();
     const table = useTable();
-    const { data, isSuccess } = useGetPropertiesSearchListQuery({ page: table.page + 1, pageSize: table.rowsPerPage })
+    const { data, isSuccess } = useGetPropertiesSearchListQuery({ page: table.page + 1, pageSize: table.rowsPerPage, search })
     const notFound = isSuccess && data?.data.properties.length === 0;
+
+    const handleSearch = (value: string) => {
+        if (ref.current) {
+            window.clearTimeout(ref.current)
+        }
+        ref.current = setTimeout(() => {
+            setSearch(value || null)
+        }, 300)
+    }
+
+
+    useEffect(() => () => {
+        if (ref.current) {
+            window.clearTimeout(ref.current)
+        }
+    }, [])
 
     return (
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
             <CustomBreadcrumbs
-                heading="Users"
+                heading="Properties"
                 links={[]}
                 sx={{
                     mb: { xs: 3, md: 5 },
@@ -39,6 +58,7 @@ const PropertiesSearchList = () => {
                     <TextField
                         fullWidth
                         placeholder="Search..."
+                        onChange={e => handleSearch(e.target.value)}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -57,6 +77,7 @@ const PropertiesSearchList = () => {
                             />
                             <TableBody>
                                 {data?.data.properties.map(el => <TableRow hover key={el.id}>
+                                    <TableCell>{el.user?.email || 'unregistered user'}</TableCell>
                                     <TableCell>{el.apiOwnerName || el.parcelNumber}</TableCell>
                                     <TableCell>{el.state}</TableCell>
                                     <TableCell>{el.county}</TableCell>
