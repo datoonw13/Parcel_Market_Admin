@@ -51,6 +51,7 @@ export function useNavData() {
         items: [
           { title: 'Users', path: paths.dashboard.users, icon: ICONS.user },
           { title: 'Properties', path: paths.dashboard.propertiesSearch, icon: ICONS.analytics },
+          { title: 'Properties Assessments', path: paths.dashboard.propertiesAssessments, icon: ICONS.analytics },
         ],
       },
     ],

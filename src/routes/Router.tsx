@@ -5,6 +5,7 @@ import UsersList from 'src/pages/UsersList';
 import AuthGuard from 'src/guards/AuthGuard';
 import GuestGuard from 'src/guards/GuestGuard';
 import GuestLayout from 'src/layouts/GuestLayout';
+import PropertyAssessments from 'src/pages/PropertyAssessments';
 import AuthedLayout from 'src/layouts/authed-layout/AuthedLayout';
 import PropertiesSearchList from 'src/pages/PropertiesSearchList';
 
@@ -34,6 +35,10 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
                 {
                     path: 'properties-search',
                     element: <PropertiesSearchList />,
+                },
+                {
+                    path: 'properties-assessments',
+                    element: <PropertyAssessments />,
                 },
             ]
         },
