@@ -28,20 +28,20 @@ const TABLE_HEAD = [
 const PropertyAssessments = () => {
     const ref = useRef<ReturnType<typeof setTimeout>>()
     const settings = useSettingsContext();
-    const [search, setSearch] = useState<string | null>(null)
+    // const [search, setSearch] = useState<string | null>(null)
     const table = useTable();
-    const { data, isSuccess } = useGetPropertiesAssessmentsQuery({ page: table.page + 1, pageSize: table.rowsPerPage, search })
+    const { data, isSuccess } = useGetPropertiesAssessmentsQuery({ page: table.page + 1, pageSize: table.rowsPerPage, search: null })
     const notFound = isSuccess && data?.data.properties.length === 0;
     const [openItemId, setOpenItemId] = useState<number | null>(null)
 
-    const handleSearch = (value: string) => {
-        if (ref.current) {
-            window.clearTimeout(ref.current)
-        }
-        ref.current = setTimeout(() => {
-            setSearch(value || null)
-        }, 300)
-    }
+    // const handleSearch = (value: string) => {
+    //     if (ref.current) {
+    //         window.clearTimeout(ref.current)
+    //     }
+    //     ref.current = setTimeout(() => {
+    //         setSearch(value || null)
+    //     }, 300)
+    // }
 
 
     const handleCollapse = (id: number) => {
@@ -92,11 +92,11 @@ const PropertyAssessments = () => {
                                         <TableRow onClick={() => handleCollapse(el.id)} hover sx={{ cursor: "pointer" }}>
                                             <TableCell>{el.name_owner}</TableCell>
                                             <TableCell>{el.parcelNumber}</TableCell>
-                                            <TableCell>Property Type </TableCell>
-                                            <TableCell>arcage</TableCell>
+                                            <TableCell>{el?.propertyType || '-'}</TableCell>
+                                            <TableCell>{el?.arcage || '-'}</TableCell>
                                             <TableCell>{el.price}</TableCell>
-                                            <TableCell>last sale price</TableCell>
-                                            <TableCell>last sale date</TableCell>
+                                            <TableCell size='small'>{el?.lastSalesPrice}</TableCell>
+                                            <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD/YY hh:mm A') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD/YY hh:mm A')}</TableCell>
                                             <TableCell><IconButton >{openItemId === el.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}</IconButton></TableCell>
                                         </TableRow>

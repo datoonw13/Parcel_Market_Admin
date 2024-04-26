@@ -29,6 +29,10 @@ export interface IPropertyAssessment {
         parcelNumber: string;
         price: string;
         state: string;
+        "lastSalesPrice": number,
+        "lastSalesDate": number,
+        "propertyType": string,
+        arcage: number,
         assessments: Array<{
                 "id": number,
                 "owner": string,
