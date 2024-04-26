@@ -20,3 +20,26 @@ export interface IPropertySearch {
         "dateCreated": Date,
         user?: {email?: string}
 }
+
+export interface IPropertyAssessment {
+        county: string;
+        dateCreated: Date;
+        id: number;
+        name_owner: string;
+        parcelNumber: string;
+        price: string;
+        state: string;
+        assessments: Array<{
+                "id": number,
+                "owner": string,
+                "parselId": string,
+                "propertyType": string,
+                "arcage": string,
+                "price":  number,
+                "isValid": boolean,
+                "lastSalesPrice": number,
+                "lastSalesDate": number,
+                "property_id": number,
+                "dateCreated": Date
+            }>
+} 
