@@ -58,7 +58,7 @@ const PropertyAssessments = () => {
     return (
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
             <CustomBreadcrumbs
-                heading="Users"
+                heading="Properties Assessments"
                 links={[]}
                 sx={{
                     mb: { xs: 3, md: 5 },
