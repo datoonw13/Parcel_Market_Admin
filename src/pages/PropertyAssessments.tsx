@@ -17,10 +17,11 @@ const TABLE_HEAD = [
     { id: 'parcelId', label: 'Parcel Id' },
     { id: 'propertyType', label: 'Property Type' },
     { id: 'acrage', label: 'Acrage' },
-    { id: 'marketPrice', label: 'Market Price' },
+    { id: 'calculatedPrice', label: 'Calculated price' },
     { id: 'lastSalePrice', label: 'Last Sale Price' },
     { id: 'lastSaleDate', label: 'Last Sale Date' },
     { id: 'searchDateTime', label: 'Search date/time' },
+    { id: 'state', label: 'State/County' },
     { id: 'opt', label: '' },
 ];
 
@@ -56,7 +57,7 @@ const PropertyAssessments = () => {
 
 
     return (
-        <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <Container maxWidth={settings.themeStretch ? false : 'xl'}>
             <CustomBreadcrumbs
                 heading="Properties Assessments"
                 links={[]}
@@ -93,11 +94,12 @@ const PropertyAssessments = () => {
                                             <TableCell>{el.name_owner}</TableCell>
                                             <TableCell>{el.parcelNumber}</TableCell>
                                             <TableCell>{el?.propertyType || '-'}</TableCell>
-                                            <TableCell>{el?.arcage || '-'}</TableCell>
+                                            <TableCell>{el?.acrage || '-'}</TableCell>
                                             <TableCell>{el.price}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice}</TableCell>
-                                            <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD/YY hh:mm A') : '-'}</TableCell>
-                                            <TableCell>{moment(el.dateCreated).format('MM-DD/YY hh:mm A')}</TableCell>
+                                            <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
+                                            <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
+                                            <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
                                             <TableCell><IconButton >{openItemId === el.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}</IconButton></TableCell>
                                         </TableRow>
                                         {openItemId === el.id && el.assessments.map(assessment =>
@@ -105,11 +107,13 @@ const PropertyAssessments = () => {
                                                 <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
                                                 <TableCell size='small'>{assessment.parselId}</TableCell>
                                                 <TableCell size='small'>{assessment.propertyType} </TableCell>
-                                                <TableCell size='small'>{assessment.arcage}</TableCell>
-                                                <TableCell size='small'>{assessment.price}</TableCell>
+
+                                                <TableCell size='small'>{assessment.acrage}</TableCell>
+                                                <TableCell size='small'>-</TableCell>
                                                 <TableCell size='small'>{assessment.lastSalesPrice}</TableCell>
-                                                <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD/YY hh:mm A') : '-'}</TableCell>
-                                                <TableCell size='small'>{moment(el.dateCreated).format('MM-DD/YY hh:mm A')}</TableCell>
+                                                <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
+                                                <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
+                                                <TableCell size='small'>- </TableCell>
                                                 <TableCell />
                                             </TableRow>
                                         )}
