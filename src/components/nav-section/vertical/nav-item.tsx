@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import { alpha, styled } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -102,16 +102,9 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
     if (externalLink)
       return (
         <Link
-          href={path}
-          target="_blank"
-          rel="noopener"
+          to={path}
           color="inherit"
-          underline="none"
-          sx={{
-            ...(disabled && {
-              cursor: 'default',
-            }),
-          }}
+          style={{ textDecoration: 'none' }}
         >
           {renderContent}
         </Link>
@@ -119,14 +112,9 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
 
     return (
       <Link
-        href={path}
+        to={path}
         color="inherit"
-        underline="none"
-        sx={{
-          ...(disabled && {
-            cursor: 'default',
-          }),
-        }}
+        style={{ textDecoration: 'none' }}
       >
         {renderContent}
       </Link>
