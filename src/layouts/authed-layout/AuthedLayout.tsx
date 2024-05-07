@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 
 import Box from '@mui/material/Box';
 
@@ -11,6 +12,7 @@ import Header from './header';
 import NavMini from './nav-mini';
 import NavVertical from './nav-vertical';
 import NavHorizontal from './nav-horizontal';
+import { useNavData } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +23,9 @@ type Props = {
 export default function DashboardLayout({ children }: Props) {
     const settings = useSettingsContext();
     const [open, setOpen] = useState(false)
+    const { pathname } = useLocation()
+    const navigate = useNavigate()
+    const navData = useNavData()
 
     const lgUp = useResponsive('up', 'lg');
 
@@ -34,6 +39,12 @@ export default function DashboardLayout({ children }: Props) {
     const renderHorizontal = <NavHorizontal />;
 
     const renderNavVertical = <NavVertical openNav={open} onCloseNav={() => setOpen(false)} />;
+
+    useEffect(() => {
+        if (pathname === '/') {
+            navigate(navData[0].items[0].path)
+        }
+    }, [navData, navigate, pathname])
 
     if (isHorizontal) {
         return (
@@ -66,6 +77,8 @@ export default function DashboardLayout({ children }: Props) {
             </>
         );
     }
+
+
 
     return (
         <>

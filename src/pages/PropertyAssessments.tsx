@@ -107,7 +107,6 @@ const PropertyAssessments = () => {
                                                 <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
                                                 <TableCell size='small'>{assessment.parselId}</TableCell>
                                                 <TableCell size='small'>{assessment.propertyType} </TableCell>
-
                                                 <TableCell size='small'>{assessment.acrage}</TableCell>
                                                 <TableCell size='small'>-</TableCell>
                                                 <TableCell size='small'>{assessment.lastSalesPrice}</TableCell>

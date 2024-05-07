@@ -42,7 +42,6 @@ export default function Router({ getUser, getUserLoading }: { getUser: () => voi
                 },
             ]
         },
-
         {
             path: 'auth',
             element: <Suspense fallback={<SplashLoading />}>
