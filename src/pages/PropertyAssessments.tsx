@@ -11,6 +11,8 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
 
+const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
 
 const TABLE_HEAD = [
     { id: 'owner', label: 'Owner' },
@@ -95,8 +97,8 @@ const PropertyAssessments = () => {
                                             <TableCell>{el.parcelNumber}</TableCell>
                                             <TableCell>{el?.propertyType || '-'}</TableCell>
                                             <TableCell>{el?.acrage || '-'}</TableCell>
-                                            <TableCell>{el.price}</TableCell>
-                                            <TableCell size='small'>{el?.lastSalesPrice}</TableCell>
+                                            <TableCell>{formatter.format(Number(el.price))}</TableCell>
+                                            <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
@@ -109,7 +111,7 @@ const PropertyAssessments = () => {
                                                 <TableCell size='small'>{assessment.propertyType} </TableCell>
                                                 <TableCell size='small'>{assessment.acrage}</TableCell>
                                                 <TableCell size='small'>-</TableCell>
-                                                <TableCell size='small'>{assessment.lastSalesPrice}</TableCell>
+                                                <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
                                                 <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                                 <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                                 <TableCell size='small'>- </TableCell>

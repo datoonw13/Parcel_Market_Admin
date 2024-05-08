@@ -19,6 +19,8 @@ const TABLE_HEAD = [
     { id: 'price', label: 'price', width: 180 },
 ];
 
+const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
 
 const PropertiesSearchList = () => {
     const ref = useRef<ReturnType<typeof setTimeout>>()
@@ -81,7 +83,7 @@ const PropertiesSearchList = () => {
                                     <TableCell>{el.apiOwnerName || el.parcelNumber}</TableCell>
                                     <TableCell>{el.state}</TableCell>
                                     <TableCell>{el.county}</TableCell>
-                                    <TableCell>{el.price}</TableCell>
+                                    <TableCell>{formatter.format(Number(el.price))}</TableCell>
                                 </TableRow>)}
                                 <TableNoData notFound={notFound} />
                             </TableBody>
