@@ -41,6 +41,7 @@ export interface IPropertyAssessment {
                 "acrage": string,
                 "price":  number,
                 "isValid": boolean,
+                "isMedianValid": boolean;
                 "lastSalesPrice": number,
                 "lastSalesDate": number,
                 "property_id": number,
