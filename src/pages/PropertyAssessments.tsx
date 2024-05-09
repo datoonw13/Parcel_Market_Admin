@@ -138,7 +138,7 @@ const PropertyAssessments = () => {
                                 rowCount={data?.data.properties.length || 0}
                             />
                             <TableBody>
-                                {data?.data.properties.slice(0, 1).map(el =>
+                                {data?.data.properties.map(el =>
                                     <Fragment key={el.id} >
                                         <TableRow onClick={() => handleCollapse(el.id)} hover sx={{ cursor: "pointer" }}>
                                             <TableCell>{el.name_owner}</TableCell>
