@@ -101,7 +101,7 @@ const PropertyAssessments = () => {
                                             <TableCell>{el?.acrage || '-'}</TableCell>
                                             <TableCell>{formatter.format(Number(el.price))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
-                                            <TableCell size='small'>-</TableCell>
+                                            <TableCell size='small'>{formatter.format(Number(el.price) / Number(assessment.acrage))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
