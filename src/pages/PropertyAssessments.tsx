@@ -56,9 +56,8 @@ const getMedian = (item: IPropertyAssessment, currentEl: IPropertyAssessment['as
     }
 }
 
-const getParcelProces = (item: IPropertyAssessment) => {
-    const sortedPrice = item.assessments.filter(el => el.isValid).map(el => Number(el.lastSalesPrice) / Number(el.acrage)).sort((a, b) => a - b)
-    console.log(sortedPrice, 22);
+const getParcelPrices = (item: IPropertyAssessment) => {
+    const sortedPrice = item.assessments.filter(el => getMedian(item, el).res && el.isValid).map(el => Number(el.lastSalesPrice) / Number(el.acrage)).sort((a, b) => a - b)
 
     return {
         pricePerAcre: sortedPrice.reduce((acc, cur) => acc + cur, 0) / sortedPrice.length,
@@ -139,16 +138,16 @@ const PropertyAssessments = () => {
                                 rowCount={data?.data.properties.length || 0}
                             />
                             <TableBody>
-                                {data?.data.properties.map(el =>
+                                {data?.data.properties.slice(0, 1).map(el =>
                                     <Fragment key={el.id} >
                                         <TableRow onClick={() => handleCollapse(el.id)} hover sx={{ cursor: "pointer" }}>
                                             <TableCell>{el.name_owner}</TableCell>
                                             <TableCell>{el.parcelNumber}</TableCell>
                                             <TableCell>{el?.propertyType || '-'}</TableCell>
                                             <TableCell>{el?.acrage || '-'}</TableCell>
-                                            <TableCell>{formatter.format(Number(getParcelProces(el).price))}</TableCell>
+                                            <TableCell>{formatter.format(Number(getParcelPrices(el).price))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
-                                            <TableCell size='small'>{formatter.format(Number(getParcelProces(el).pricePerAcre))}</TableCell>
+                                            <TableCell size='small'>{formatter.format(Number(getParcelPrices(el).pricePerAcre))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
@@ -164,7 +163,7 @@ const PropertyAssessments = () => {
                                                 </Box>
                                             }>
                                                 <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(el, assessment) })}>
-                                                    <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner} {assessment.isValid.toString()}</TableCell>
+                                                    <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
                                                     <TableCell size='small'>{assessment.parselId}</TableCell>
                                                     <TableCell size='small'>{assessment.propertyType} </TableCell>
                                                     <TableCell size='small'>{assessment.acrage}</TableCell>
