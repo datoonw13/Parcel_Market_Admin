@@ -32,12 +32,12 @@ const TABLE_HEAD = [
 
 const GetBg = (data: any) => {
     if (!data.isValid) {
-        return 'red';
+        return 'rgba(245, 0, 0, 0.5)';
     }
     if (data.isMedianValid) {
-        return 'green';
+        return 'rgba(0, 255, 0, 0.5)';
     }
-    return 'yellow';
+    return 'rgba(255, 187, 0, 0.5)';
 }
 
 const PropertyAssessments = () => {
