@@ -22,6 +22,7 @@ const TABLE_HEAD = [
     { id: 'acrage', label: 'Acrage' },
     { id: 'calculatedPrice', label: 'Calculated price' },
     { id: 'lastSalePrice', label: 'Last Sale Price' },
+    { id: 'pricePerAcrage', label: 'Price per acrage' },
     { id: 'lastSaleDate', label: 'Last Sale Date' },
     { id: 'searchDateTime', label: 'Search date/time' },
     { id: 'state', label: 'State/County' },
@@ -100,6 +101,7 @@ const PropertyAssessments = () => {
                                             <TableCell>{el?.acrage || '-'}</TableCell>
                                             <TableCell>{formatter.format(Number(el.price))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
+                                            <TableCell size='small'>-</TableCell>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
@@ -113,6 +115,7 @@ const PropertyAssessments = () => {
                                                 <TableCell size='small'>{assessment.acrage}</TableCell>
                                                 <TableCell size='small'>-</TableCell>
                                                 <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
+                                                <TableCell size='small'>{formatter.format(assessment.lastSalesPrice / Number(assessment.acrage))}</TableCell>
                                                 <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                                 <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                                 <TableCell size='small'>- </TableCell>
