@@ -30,6 +30,16 @@ const TABLE_HEAD = [
 ];
 
 
+const GetBg = (data: any) => {
+    if (!data.isValid) {
+        return 'red';
+    }
+    if (data.isMedianValid) {
+        return 'green';
+    }
+    return 'yellow';
+}
+
 const PropertyAssessments = () => {
     const ref = useRef<ReturnType<typeof setTimeout>>()
     const settings = useSettingsContext();
@@ -108,7 +118,7 @@ const PropertyAssessments = () => {
                                             <TableCell><IconButton >{openItemId === el.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}</IconButton></TableCell>
                                         </TableRow>
                                         {openItemId === el.id && el.assessments.map(assessment =>
-                                            <TableRow key={assessment.id} sx={theme => ({ bgcolor: assessment.isValid ? theme.palette.success.light : assessment.isMedianValid ? 'yellow' : theme.palette.error.light })}>
+                                            <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(assessment) })}>
                                                 <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
                                                 <TableCell size='small'>{assessment.parselId}</TableCell>
                                                 <TableCell size='small'>{assessment.propertyType} </TableCell>
