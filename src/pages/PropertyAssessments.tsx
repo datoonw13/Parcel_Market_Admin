@@ -3,8 +3,9 @@ import moment from 'moment';
 import React, { useRef, useState, Fragment, useEffect } from 'react'
 
 import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material'
-import { Card, Table, Stack, TableRow, Container, TableBody, TableCell, IconButton, TableContainer } from '@mui/material'
+import { Box, Card, Table, Stack, styled, Tooltip, TableRow, Container, TableBody, TableCell, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses } from '@mui/material'
 
+import { IPropertyAssessment } from 'src/@types/property';
 import { useGetPropertiesAssessmentsQuery } from 'src/lib/features/apis/propertyApi';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -14,6 +15,14 @@ import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 's
 
 const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
+
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))({
+    [`& .${tooltipClasses.tooltip}`]: {
+        maxWidth: 500,
+    },
+});
 
 const TABLE_HEAD = [
     { id: 'owner', label: 'Owner' },
@@ -30,14 +39,34 @@ const TABLE_HEAD = [
 ];
 
 
-const GetBg = (data: any) => {
-    if (!data.isValid) {
+
+
+const getMedian = (item: IPropertyAssessment, currentEl: IPropertyAssessment['assessments'][0]) => {
+    const sortedPrice = item.assessments.filter(el => el.isValid).map(el => Number(el.lastSalesPrice) / Number(el.acrage)).sort((a, b) => a - b)
+    const median = Number(sortedPrice[Math.floor(sortedPrice.length / 2)].toFixed(2))
+    const halfMedian = Number((median / 2).toFixed(2))
+    const fiveMedian = Number((median * 5).toFixed(2))
+    const currentElPricePerAcrage = Number((Number(currentEl.lastSalesPrice) / Number(currentEl.acrage)).toFixed(2))
+    const res = currentElPricePerAcrage > halfMedian && currentElPricePerAcrage < fiveMedian
+    return {
+        median,
+        halfMedian,
+        fiveMedian,
+        res
+    }
+}
+
+const GetBg = (item: IPropertyAssessment, currentEl: IPropertyAssessment['assessments'][0]) => {
+    const { res: isValidMedian } = getMedian(item, currentEl)
+
+    if (!currentEl.isValid) {
         return 'rgba(245, 0, 0, 0.5)';
     }
-    if (data.isMedianValid) {
+    if (isValidMedian) {
         return 'rgba(0, 255, 0, 0.5)';
     }
-    return 'rgba(255, 187, 0, 0.5)';
+
+    return 'yellow';
 }
 
 const PropertyAssessments = () => {
@@ -69,6 +98,7 @@ const PropertyAssessments = () => {
         }
     }, [])
 
+    const sortData = (x: IPropertyAssessment['assessments']) => x.sort((a, b) => (Number(a.lastSalesPrice) / Number(a.acrage)) - (Number(b.lastSalesPrice) / Number(b.acrage)))
 
     return (
         <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -87,10 +117,7 @@ const PropertyAssessments = () => {
                         onChange={e => handleSearch(e.target.value)}
                         InputProps={{
                             startAdornment: (
-                                <InputAdornment position="start">
-                                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                                </InputAdornment>
-                            ),
+                     lastSalesPrice       ),
                         }}
                     /> */}
                 </Stack>
@@ -117,20 +144,29 @@ const PropertyAssessments = () => {
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
                                             <TableCell><IconButton >{openItemId === el.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}</IconButton></TableCell>
                                         </TableRow>
-                                        {openItemId === el.id && el.assessments.map(assessment =>
-                                            <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(assessment) })}>
-                                                <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
-                                                <TableCell size='small'>{assessment.parselId}</TableCell>
-                                                <TableCell size='small'>{assessment.propertyType} </TableCell>
-                                                <TableCell size='small'>{assessment.acrage}</TableCell>
-                                                <TableCell size='small'>-</TableCell>
-                                                <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
-                                                <TableCell size='small'>{formatter.format(assessment.lastSalesPrice / Number(assessment.acrage))}</TableCell>
-                                                <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
-                                                <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
-                                                <TableCell size='small'>- </TableCell>
-                                                <TableCell />
-                                            </TableRow>
+                                        {openItemId === el.id && sortData([...el.assessments]).map(assessment =>
+                                            <CustomWidthTooltip PopperProps={{ sx: { width: 500 } }} sx={{ width: ' 500px' }} title={
+                                                <Box>
+                                                    <Typography>Median: <b style={{ marginLeft: 10 }}>{getMedian(el, (assessment)).median}</b></Typography>
+                                                    <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{getMedian(el, (assessment)).halfMedian}</b></Typography>
+                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{getMedian(el, (assessment)).fiveMedian}</b></Typography>
+                                                    <Typography>{`Median / 2 < CurrentItemLastSalePrice < Median * 5`} : <b style={{ marginLeft: 10, }}>{getMedian(el, (assessment)).res.toString()}</b></Typography>
+                                                </Box>
+                                            }>
+                                                <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(el, assessment) })}>
+                                                    <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner} {assessment.isValid.toString()}</TableCell>
+                                                    <TableCell size='small'>{assessment.parselId}</TableCell>
+                                                    <TableCell size='small'>{assessment.propertyType} </TableCell>
+                                                    <TableCell size='small'>{assessment.acrage}</TableCell>
+                                                    <TableCell size='small'>-</TableCell>
+                                                    <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
+                                                    <TableCell size='small'>{formatter.format(assessment.lastSalesPrice / Number(assessment.acrage))}</TableCell>
+                                                    <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
+                                                    <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
+                                                    <TableCell size='small'>- </TableCell>
+                                                    <TableCell />
+                                                </TableRow>
+                                            </CustomWidthTooltip>
                                         )}
                                     </Fragment>
                                 )}
