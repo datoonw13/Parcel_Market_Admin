@@ -56,6 +56,16 @@ const getMedian = (item: IPropertyAssessment, currentEl: IPropertyAssessment['as
     }
 }
 
+const getParcelProces = (item: IPropertyAssessment) => {
+    const sortedPrice = item.assessments.filter(el => el.isValid).map(el => Number(el.lastSalesPrice) / Number(el.acrage)).sort((a, b) => a - b)
+    console.log(sortedPrice, 22);
+
+    return {
+        pricePerAcre: sortedPrice.reduce((acc, cur) => acc + cur, 0) / sortedPrice.length,
+        price: (sortedPrice.reduce((acc, cur) => acc + cur, 0) / sortedPrice.length) * item.acrage
+    }
+}
+
 const GetBg = (item: IPropertyAssessment, currentEl: IPropertyAssessment['assessments'][0]) => {
     const { res: isValidMedian } = getMedian(item, currentEl)
 
@@ -136,9 +146,9 @@ const PropertyAssessments = () => {
                                             <TableCell>{el.parcelNumber}</TableCell>
                                             <TableCell>{el?.propertyType || '-'}</TableCell>
                                             <TableCell>{el?.acrage || '-'}</TableCell>
-                                            <TableCell>{formatter.format(Number(el.price))}</TableCell>
+                                            <TableCell>{formatter.format(Number(getParcelProces(el).price))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
-                                            <TableCell size='small'>{formatter.format(Number(el.price) / Number(el.acrage))}</TableCell>
+                                            <TableCell size='small'>{formatter.format(Number(getParcelProces(el).pricePerAcre))}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
