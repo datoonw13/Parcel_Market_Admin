@@ -131,7 +131,7 @@ const PropertyAssessments = () => {
                                                     <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRUpperBound}</b></Typography>
                                                     <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.averagePrice}</b></Typography>
                                                 </Box>}>
-                                            <TableCell size='small'>{formatter.format(el.frontEndCalculateIQR.averagePrice)}</TableCell>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculateIQR.averagePrice *el.acrage)}</TableCell>
                                         </CustomWidthTooltip>
                                         <CustomWidthTooltip title={<Box>
                                                     <Typography>Q1: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q1}</b></Typography>
