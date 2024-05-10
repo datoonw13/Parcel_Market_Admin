@@ -1,3 +1,5 @@
+import { calculatePropertyPrice } from "src/utils/calculatePropertiesPrices";
+
 import { IPagination, ResponseType } from "src/@types/common";
 import { IPropertySearch, IPropertyAssessment } from "src/@types/property";
 
@@ -24,8 +26,14 @@ const propertyApi = api.injectEndpoints({
           page:arg.page,
           pageSize: arg.pageSize,
           ... arg.search && {search: arg.search}
-        },
+        }
       }),
+      transformResponse: (res: any) => {
+        res.data.properties = res.data.properties.map((el: any) => calculatePropertyPrice(el))
+        console.log(res.data.properties);
+        
+        return res
+      }
     }),
   }),
 });

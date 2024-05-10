@@ -33,6 +33,11 @@ export interface IPropertyAssessment {
         "lastSalesDate": number,
         "propertyType": string,
         acrage: number,
+        frontEndCalculatesMedian: number,
+        frontEndCalculatesLowerMedian: number,
+        frontEndCalculatesUpperMedian: number,
+        frontEndCalculatesPricePerAcre: number
+        frontEndCalculatesPrice: number
         assessments: Array<{
                 "id": number,
                 "owner": string,
@@ -45,6 +50,7 @@ export interface IPropertyAssessment {
                 "lastSalesPrice": number,
                 "lastSalesDate": number,
                 "property_id": number,
-                "dateCreated": Date
+                "dateCreated": Date,
+                frontEndCalculateIsValidMedian: boolean
             }>
 } 

@@ -39,39 +39,11 @@ const TABLE_HEAD = [
 ];
 
 
-
-
-const getMedian = (item: IPropertyAssessment, currentEl: IPropertyAssessment['assessments'][0]) => {
-    const sortedPrice = item.assessments.filter(el => el.isValid).map(el => Number(el.lastSalesPrice) / Number(el.acrage)).sort((a, b) => a - b)
-    const median = Number(sortedPrice[Math.floor(sortedPrice.length / 2)].toFixed(2))
-    const halfMedian = Number((median / 2).toFixed(2))
-    const fiveMedian = Number((median * 5).toFixed(2))
-    const currentElPricePerAcrage = Number((Number(currentEl.lastSalesPrice) / Number(currentEl.acrage)).toFixed(2))
-    const res = currentElPricePerAcrage > halfMedian && currentElPricePerAcrage < fiveMedian
-    return {
-        median,
-        halfMedian,
-        fiveMedian,
-        res
-    }
-}
-
-const getParcelPrices = (item: IPropertyAssessment) => {
-    const sortedPrice = item.assessments.filter(el => getMedian(item, el).res && el.isValid).map(el => Number(el.lastSalesPrice) / Number(el.acrage)).sort((a, b) => a - b)
-
-    return {
-        pricePerAcre: sortedPrice.reduce((acc, cur) => acc + cur, 0) / sortedPrice.length,
-        price: (sortedPrice.reduce((acc, cur) => acc + cur, 0) / sortedPrice.length) * item.acrage
-    }
-}
-
 const GetBg = (item: IPropertyAssessment, currentEl: IPropertyAssessment['assessments'][0]) => {
-    const { res: isValidMedian } = getMedian(item, currentEl)
-
     if (!currentEl.isValid) {
         return 'rgba(245, 0, 0, 0.5)';
     }
-    if (isValidMedian) {
+    if (currentEl.frontEndCalculateIsValidMedian) {
         return 'rgba(0, 255, 0, 0.5)';
     }
 
@@ -145,9 +117,9 @@ const PropertyAssessments = () => {
                                             <TableCell>{el.parcelNumber}</TableCell>
                                             <TableCell>{el?.propertyType || '-'}</TableCell>
                                             <TableCell>{el?.acrage || '-'}</TableCell>
-                                            <TableCell>{formatter.format(Number(getParcelPrices(el).price))}</TableCell>
+                                            <TableCell>{formatter.format(el.frontEndCalculatesPrice)}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
-                                            <TableCell size='small'>{formatter.format(Number(getParcelPrices(el).pricePerAcre))}</TableCell>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculatesPricePerAcre)}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
@@ -156,10 +128,10 @@ const PropertyAssessments = () => {
                                         {openItemId === el.id && sortData([...el.assessments]).map(assessment =>
                                             <CustomWidthTooltip PopperProps={{ sx: { width: 500 } }} sx={{ width: ' 500px' }} title={
                                                 <Box>
-                                                    <Typography>Median: <b style={{ marginLeft: 10 }}>{getMedian(el, (assessment)).median}</b></Typography>
-                                                    <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{getMedian(el, (assessment)).halfMedian}</b></Typography>
-                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{getMedian(el, (assessment)).fiveMedian}</b></Typography>
-                                                    <Typography>{`Median / 2 < CurrentItemLastSalePrice < Median * 5`} : <b style={{ marginLeft: 10, }}>{getMedian(el, (assessment)).res.toString()}</b></Typography>
+                                                    <Typography>Median: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesMedian}</b></Typography>
+                                                    <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesLowerMedian}</b></Typography>
+                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesUpperMedian}</b></Typography>
+                                                    <Typography>{`Median / 2 < CurrentItemLastSalePrice < Median * 5`} : <b style={{ marginLeft: 10, }}>{assessment.frontEndCalculateIsValidMedian.toString()}</b></Typography>
                                                 </Box>
                                             }>
                                                 <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(el, assessment) })}>
