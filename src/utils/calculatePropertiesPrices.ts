@@ -22,6 +22,8 @@ function arrayMedian(numbers: number[]) {
 
 const IQRCalculation = (arr: number[]) => {
     const array = [...arr]
+    console.log(array);
+    
     const q1 = arrayMedian(array.slice(0, array.length / 2))
     const q2 = arrayMedian(array.length % 2 === 0 ?  array.slice(array.length / 2) : array.slice((array.length / 2) + 1))
     const IQR = q2 - q1
@@ -71,6 +73,6 @@ export const calculatePropertyPrice = (property: IPropertyAssessment) => {
         frontEndCalculatedIsValidIQR: isValidIQR(el, data.frontEndCalculatedIQR),
         frontEndCalculateIsValidMedian: isValidMedian(el, data.frontEndCalculatedMedian)
     }
-    ))
+    )).sort((a,b) => calcPricePerAcre(a.lastSalesPrice, a.acrage) - calcPricePerAcre(b.lastSalesPrice, b.acrage))
     return data
 }
