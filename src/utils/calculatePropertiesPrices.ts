@@ -2,9 +2,11 @@ import { IPropertyAssessment } from "src/@types/property";
 
 const toFixed2 = (val: string | number) => Number(parseFloat(val.toString()).toFixed(2))
 
-const calcPricePerAcre = (lastSalePrice: string | number, acrage: string | number) => toFixed2(toFixed2(lastSalePrice) / toFixed2(acrage))
+export const calcPricePerAcre = (lastSalePrice: string | number, acrage: string | number) =>  {
+    const pricePerAcre = Number(acrage) < 1 ? Number(lastSalePrice) * Number(acrage) : Number(lastSalePrice) / Number(acrage) 
+    return toFixed2(pricePerAcre)
+}
 
-const frontCalculateIsValidMedian = (frontCalculatesLowerMedian: number, frontCalculatesUpperMedian: number, price: number) =>  !!(price > frontCalculatesLowerMedian && price < frontCalculatesUpperMedian)
 
 
 function arrayMedian(numbers: number[]) {
@@ -36,38 +38,39 @@ const IQRCalculation = (arr: number[]) => {
     }
 }
 
+const isValidIQR = (assesment: IPropertyAssessment['assessments'][0], frontEndCalculatedIQR: IPropertyAssessment['frontEndCalculatedIQR']) => !!(assesment.isValid && (calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) > frontEndCalculatedIQR.IQRLowerBound && calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) < frontEndCalculatedIQR.IQRUpperBound))
+
+const medianCalculation = (arr: number[]) => {
+    const array = [...arr]
+    const median = toFixed2(array[Math.floor(array.length / 2)])
+    const lowerMedian = toFixed2(median / 2)
+    const upperMedian = toFixed2(median  * 5)
+    const filteredArray = array.filter(el => el > lowerMedian && el < upperMedian)
+    return {
+        median,
+        lowerMedian,
+        upperMedian,
+        averagePrice: toFixed2(filteredArray.reduce((acc,cur) => acc + cur, 0) / filteredArray.length)
+    }
+
+}
+
+const isValidMedian = (assesment: IPropertyAssessment['assessments'][0], frontEndCalculatedMedian: IPropertyAssessment['frontEndCalculatedMedian']) => !!(assesment.isValid && (calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) > frontEndCalculatedMedian.lowerMedian && calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) < frontEndCalculatedMedian.upperMedian))
+
 
 export const calculatePropertyPrice = (property: IPropertyAssessment) => {
     const data = {
         ...property, 
-        frontEndCalculatesMedian: 0,
-        frontEndCalculatesLowerMedian: 0,
-        frontEndCalculatesUpperMedian: 0,
-        frontEndCalculatesPrice: 0
     }
-    // Calculate with mediana
-    const assessmentsPricePerAcre = property.assessments.filter(el => el.isValid).map(el => calcPricePerAcre(el.lastSalesPrice, el.acrage)).sort((a,b) => a - b)
-    const frontCalculatesMedian = toFixed2(assessmentsPricePerAcre[Math.floor(assessmentsPricePerAcre.length / 2)])
-    const frontCalculatesLowerMedian = toFixed2(frontCalculatesMedian / 2)
-    const frontCalculatesUpperMedian = toFixed2(frontCalculatesMedian  * 5)
-    data.frontEndCalculatesMedian = frontCalculatesMedian
-    data.frontEndCalculatesLowerMedian = frontCalculatesLowerMedian
-    data.frontEndCalculatesUpperMedian = frontCalculatesUpperMedian
-    data.assessments = data.assessments.map(el => ({...el, frontEndCalculateIsValidMedian: frontCalculateIsValidMedian(frontCalculatesLowerMedian, frontCalculatesUpperMedian, calcPricePerAcre(el.lastSalesPrice, el.acrage)) }))
-    .sort((a,b) => calcPricePerAcre(a.lastSalesPrice, a.acrage) - calcPricePerAcre(b.lastSalesPrice, b.acrage))
-    const validPricesForParcelPriceCalculation =  data.assessments.filter(el => el.frontEndCalculateIsValidMedian && el.isValid).map(el => calcPricePerAcre(el.lastSalesPrice, el.acrage)).sort((a, b) => a - b) 
-    data.frontEndCalculatesPricePerAcre = toFixed2(validPricesForParcelPriceCalculation.reduce((acc,cur) => acc + cur, 0) / validPricesForParcelPriceCalculation.length)
-    data.frontEndCalculatesPrice = toFixed2(data.frontEndCalculatesPricePerAcre * data.acrage)
-
-    // IQR Calculation
-    // get all assesment pricePerAcre which is -isValid-
     const validPrices =  property.assessments.filter(el => el.isValid).map(el => calcPricePerAcre(el.lastSalesPrice, el.acrage)).sort((a,b) => a - b)
-    data.frontEndCalculateIQR = IQRCalculation(validPrices)
-    // @ts-ignore
+    const IQR =IQRCalculation(validPrices)
+    const median =medianCalculation(validPrices)
+    data.frontEndCalculatedIQR =  IQR
+    data.frontEndCalculatedMedian =  median
     data.assessments = data.assessments.map(el => ({...el, 
-        frontEndCalculatesIsValidIQR: el.isValid && (calcPricePerAcre(el.lastSalesPrice, el.acrage) > data.frontEndCalculateIQR.IQRLowerBound && calcPricePerAcre(el.lastSalesPrice, el.acrage) < data.frontEndCalculateIQR.IQRUpperBound)
+        frontEndCalculatedIsValidIQR: isValidIQR(el, data.frontEndCalculatedIQR),
+        frontEndCalculateIsValidMedian: isValidMedian(el, data.frontEndCalculatedMedian)
     }
     ))
-    // data.assessments.map(el => console.log(calcPricePerAcre(el.lastSalesPrice, el.acrage), data.frontEndCalculateIQR.IQRLowerBound , data.frontEndCalculateIQR.IQRUpperBound))
     return data
 }

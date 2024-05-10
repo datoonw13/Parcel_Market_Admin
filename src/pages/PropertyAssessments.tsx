@@ -12,6 +12,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
+import { calcPricePerAcre } from 'src/utils/calculatePropertiesPrices';
 
 const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -29,8 +30,8 @@ const TABLE_HEAD = [
     { id: 'parcelId', label: 'Parcel Id' },
     { id: 'propertyType', label: 'Property Type' },
     { id: 'acrage', label: 'Acrage' },
-    { id: 'calculatedPrice', label: 'Calculated price' },
     { id: 'lastSalePrice', label: 'Last Sale Price' },
+    { id: 'calculatedPrice', label: 'Calculated price' },
     { id: 'pricePerAcrage', label: 'Price per acrage' },
     { id: 'calculatedPriceIQR', label: 'Calculated price IQR' },
     { id: 'calculatedPriceIQRPerAcre', label: 'Calculated price IQR Per Acre' },
@@ -92,17 +93,6 @@ const PropertyAssessments = () => {
                 }}
             />
             <Card>
-                <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1, p: 2 }}>
-                    {/* <TextField
-                        fullWidth
-                        placeholder="Search by name or email"
-                        onChange={e => handleSearch(e.target.value)}
-                        InputProps={{
-                            startAdornment: (
-                     lastSalesPrice       ),
-                        }}
-                    /> */}
-                </Stack>
                 <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
                     <Scrollbar>
                         <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }} >
@@ -120,28 +110,46 @@ const PropertyAssessments = () => {
                                             <TableCell>{el.parcelNumber}</TableCell>
                                             <TableCell>{el?.propertyType || '-'}</TableCell>
                                             <TableCell>{el?.acrage || '-'}</TableCell>
-                                            <TableCell>{formatter.format(el.frontEndCalculatesPrice)}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
-                                            <TableCell size='small'>{formatter.format(el.frontEndCalculatesPricePerAcre)}</TableCell>
+                                            <CustomWidthTooltip PopperProps={{ sx: { width: 500 } }} sx={{ width: ' 500px' }} title={
+                                                <Box>
+                                                    <Typography>Median: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.median)}</b></Typography>
+                                                    <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.lowerMedian)}</b></Typography>
+                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.upperMedian)}</b></Typography>
+                                                    <Typography>Average Price: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.averagePrice)}</b></Typography>
+                                                </Box>
+                                            }>
+                                            <TableCell>{formatter.format(el.acrage * el.frontEndCalculatedMedian.averagePrice)}</TableCell>
+                                            </CustomWidthTooltip>
+                                            <CustomWidthTooltip PopperProps={{ sx: { width: 500 } }} sx={{ width: ' 500px' }} title={
+                                                <Box>
+                                                    <Typography>Median: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.median)}</b></Typography>
+                                                    <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.lowerMedian)}</b></Typography>
+                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.upperMedian)}</b></Typography>
+                                                    <Typography>Average Price: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.averagePrice)}</b></Typography>
+                                                </Box>
+                                            }>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculatedMedian.averagePrice)}</TableCell>
+                                            </CustomWidthTooltip>
                                             <CustomWidthTooltip title={<Box>
-                                                    <Typography>Q1: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q1}</b></Typography>
-                                                    <Typography>Q2: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q2}</b></Typography>
-                                                    <Typography>IQR: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQR}</b></Typography>
-                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRLowerBound}</b></Typography>
-                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRUpperBound}</b></Typography>
-                                                    <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.averagePrice}</b></Typography>
+                                                    <Typography>Q1: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedIQR.q1)}</b></Typography>
+                                                    <Typography>Q2: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedIQR.q2)}</b></Typography>
+                                                    <Typography>IQR: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedIQR.IQR)}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedIQR.IQRLowerBound)}</b></Typography>
+                                                    <Typography>IQRUpperBound: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedIQR.IQRUpperBound)}</b></Typography>
+                                                    <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedIQR.averagePrice)}</b></Typography>
                                                 </Box>}>
-                                            <TableCell size='small'>{formatter.format(el.frontEndCalculateIQR.averagePrice *el.acrage)}</TableCell>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculatedIQR.averagePrice * el.acrage)}</TableCell>
                                         </CustomWidthTooltip>
                                         <CustomWidthTooltip title={<Box>
-                                                    <Typography>Q1: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q1}</b></Typography>
-                                                    <Typography>Q2: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q2}</b></Typography>
-                                                    <Typography>IQR: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQR}</b></Typography>
-                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRLowerBound}</b></Typography>
-                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRUpperBound}</b></Typography>
-                                                    <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.averagePrice}</b></Typography>
+                                                    <Typography>Q1: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatedIQR.q1}</b></Typography>
+                                                    <Typography>Q2: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatedIQR.q2}</b></Typography>
+                                                    <Typography>IQR: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatedIQR.IQR}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatedIQR.IQRLowerBound}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatedIQR.IQRUpperBound}</b></Typography>
+                                                    <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatedIQR.averagePrice}</b></Typography>
                                                 </Box>}>
-                                            <TableCell size='small'>{formatter.format(el.frontEndCalculateIQR.averagePrice)}</TableCell>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculatedIQR.averagePrice)}</TableCell>
                                         </CustomWidthTooltip>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
@@ -150,31 +158,21 @@ const PropertyAssessments = () => {
                                         </TableRow>
 
                                         {openItemId === el.id && el.assessments.map(assessment =>
-                                            <CustomWidthTooltip PopperProps={{ sx: { width: 500 } }} sx={{ width: ' 500px' }} title={
-                                                <Box>
-                                                    <Typography>Median: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesMedian}</b></Typography>
-                                                    <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesLowerMedian}</b></Typography>
-                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesUpperMedian}</b></Typography>
-                                                    <Typography>{`Median / 2 < CurrentItemLastSalePrice < Median * 5`} : <b style={{ marginLeft: 10, }}>{assessment.frontEndCalculateIsValidMedian.toString()}</b></Typography>
-                            
-                                                </Box>
-                                            }>
                                                 <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(assessment) })}>
                                                     <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
                                                     <TableCell size='small'>{assessment.parselId}</TableCell>
                                                     <TableCell size='small'>{assessment.propertyType} </TableCell>
                                                     <TableCell size='small'>{assessment.acrage}</TableCell>
-                                                    <TableCell size='small'>-</TableCell>
                                                     <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
-                                                    <TableCell size='small'>{formatter.format(Number(assessment.lastSalesPrice) / Number(assessment.acrage))}</TableCell>
-                                                    <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatesIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
-                                                    <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatesIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
+                                                    <TableCell size='small'>-</TableCell>
+                                                    <TableCell size='small'>{formatter.format(calcPricePerAcre(assessment.lastSalesPrice, assessment.acrage))}</TableCell>
+                                                    <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatedIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
+                                                    <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatedIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
                                                     <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                                     <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                                     <TableCell size='small'>- </TableCell>
                                                     <TableCell />
                                                 </TableRow>
-                                            </CustomWidthTooltip>
                                         )}
                                     </Fragment>
                                 )}

@@ -33,12 +33,14 @@ export interface IPropertyAssessment {
         "lastSalesDate": number,
         "propertyType": string,
         acrage: number,
-        frontEndCalculatesMedian: number,
-        frontEndCalculatesLowerMedian: number,
-        frontEndCalculatesUpperMedian: number,
-        frontEndCalculatesPricePerAcre: number
-        frontEndCalculatesPrice: number,
-        frontEndCalculateIQR: {
+        frontEndCalculatedMedian: {
+                median: number,
+                lowerMedian: number,
+                upperMedian: number,
+                averagePrice: number;
+
+        },
+        frontEndCalculatedIQR: {
                 q1: number;
                 q2: number;
                 IQR: number;
@@ -60,7 +62,7 @@ export interface IPropertyAssessment {
                 "property_id": number,
                 "dateCreated": Date,
                 frontEndCalculateIsValidMedian: boolean,
-                frontEndCalculatesIsValidIQR: number,
+                frontEndCalculatedIsValidIQR: boolean,
 
             }>
 } 
