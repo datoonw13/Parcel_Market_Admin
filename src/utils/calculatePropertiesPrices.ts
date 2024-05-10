@@ -28,7 +28,7 @@ const IQRCalculation = (arr: number[]) => {
     const q2 = arrayMedian(array.length % 2 === 0 ?  array.slice(array.length / 2) : array.slice((array.length / 2) + 1))
     const IQR = q2 - q1
     const IQRLowerBound = q1 - 1 * IQR
-    const IQRUpperBound = q2 + 1 * IQR
+    const IQRUpperBound = q2 + 1.5 * IQR
     const filteredArray =  array.filter(el => (el > IQRLowerBound && el < IQRUpperBound))
     return {
         q1: toFixed2(q1),
