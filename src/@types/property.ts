@@ -37,7 +37,15 @@ export interface IPropertyAssessment {
         frontEndCalculatesLowerMedian: number,
         frontEndCalculatesUpperMedian: number,
         frontEndCalculatesPricePerAcre: number
-        frontEndCalculatesPrice: number
+        frontEndCalculatesPrice: number,
+        frontEndCalculateIQR: {
+                q1: number;
+                q2: number;
+                IQR: number;
+                IQRLowerBound: number;
+                IQRUpperBound: number;
+                averagePrice: number;
+        }
         assessments: Array<{
                 "id": number,
                 "owner": string,
@@ -51,6 +59,8 @@ export interface IPropertyAssessment {
                 "lastSalesDate": number,
                 "property_id": number,
                 "dateCreated": Date,
-                frontEndCalculateIsValidMedian: boolean
+                frontEndCalculateIsValidMedian: boolean,
+                frontEndCalculatesIsValidIQR: number,
+
             }>
 } 

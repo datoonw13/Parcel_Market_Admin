@@ -30,8 +30,6 @@ const propertyApi = api.injectEndpoints({
       }),
       transformResponse: (res: any) => {
         res.data.properties = res.data.properties.map((el: any) => calculatePropertyPrice(el))
-        console.log(res.data.properties);
-        
         return res
       }
     }),

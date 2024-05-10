@@ -32,6 +32,8 @@ const TABLE_HEAD = [
     { id: 'calculatedPrice', label: 'Calculated price' },
     { id: 'lastSalePrice', label: 'Last Sale Price' },
     { id: 'pricePerAcrage', label: 'Price per acrage' },
+    { id: 'calculatedPriceIQR', label: 'Calculated price IQR' },
+    { id: 'calculatedPriceIQRPerAcre', label: 'Calculated price IQR Per Acre' },
     { id: 'lastSaleDate', label: 'Last Sale Date' },
     { id: 'searchDateTime', label: 'Search date/time' },
     { id: 'state', label: 'State/County' },
@@ -39,7 +41,7 @@ const TABLE_HEAD = [
 ];
 
 
-const GetBg = (item: IPropertyAssessment, currentEl: IPropertyAssessment['assessments'][0]) => {
+const GetBg = (currentEl: IPropertyAssessment['assessments'][0]) => {
     if (!currentEl.isValid) {
         return 'rgba(245, 0, 0, 0.5)';
     }
@@ -79,8 +81,7 @@ const PropertyAssessments = () => {
         }
     }, [])
 
-    const sortData = (x: IPropertyAssessment['assessments']) => x.sort((a, b) => (Number(a.lastSalesPrice) / Number(a.acrage)) - (Number(b.lastSalesPrice) / Number(b.acrage)))
-
+    console.log(data?.data)
     return (
         <Container maxWidth={settings.themeStretch ? false : 'xl'}>
             <CustomBreadcrumbs
@@ -112,6 +113,8 @@ const PropertyAssessments = () => {
                             <TableBody>
                                 {data?.data.properties.map(el =>
                                     <Fragment key={el.id} >
+                                      
+                                        
                                         <TableRow onClick={() => handleCollapse(el.id)} hover sx={{ cursor: "pointer" }}>
                                             <TableCell>{el.name_owner}</TableCell>
                                             <TableCell>{el.parcelNumber}</TableCell>
@@ -120,21 +123,43 @@ const PropertyAssessments = () => {
                                             <TableCell>{formatter.format(el.frontEndCalculatesPrice)}</TableCell>
                                             <TableCell size='small'>{el?.lastSalesPrice ? formatter.format(el.lastSalesPrice) : '-'}</TableCell>
                                             <TableCell size='small'>{formatter.format(el.frontEndCalculatesPricePerAcre)}</TableCell>
+                                            <CustomWidthTooltip title={<Box>
+                                                    <Typography>Q1: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q1}</b></Typography>
+                                                    <Typography>Q2: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q2}</b></Typography>
+                                                    <Typography>IQR: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQR}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRLowerBound}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRUpperBound}</b></Typography>
+                                                    <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.averagePrice}</b></Typography>
+                                                </Box>}>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculateIQR.averagePrice)}</TableCell>
+                                        </CustomWidthTooltip>
+                                        <CustomWidthTooltip title={<Box>
+                                                    <Typography>Q1: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q1}</b></Typography>
+                                                    <Typography>Q2: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.q2}</b></Typography>
+                                                    <Typography>IQR: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQR}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRLowerBound}</b></Typography>
+                                                    <Typography>IQRLowerBound: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.IQRUpperBound}</b></Typography>
+                                                    <Typography>averagePrice: <b style={{ marginLeft: 10 }}>{el.frontEndCalculateIQR.averagePrice}</b></Typography>
+                                                </Box>}>
+                                            <TableCell size='small'>{formatter.format(el.frontEndCalculateIQR.averagePrice)}</TableCell>
+                                        </CustomWidthTooltip>
                                             <TableCell size='small'>{el?.lastSalesDate ? moment(el.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                             <TableCell>{`${el?.state}/${el?.county}`}</TableCell>
                                             <TableCell><IconButton >{openItemId === el.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}</IconButton></TableCell>
                                         </TableRow>
-                                        {openItemId === el.id && sortData([...el.assessments]).map(assessment =>
+
+                                        {openItemId === el.id && el.assessments.map(assessment =>
                                             <CustomWidthTooltip PopperProps={{ sx: { width: 500 } }} sx={{ width: ' 500px' }} title={
                                                 <Box>
                                                     <Typography>Median: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesMedian}</b></Typography>
                                                     <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesLowerMedian}</b></Typography>
                                                     <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{el.frontEndCalculatesUpperMedian}</b></Typography>
                                                     <Typography>{`Median / 2 < CurrentItemLastSalePrice < Median * 5`} : <b style={{ marginLeft: 10, }}>{assessment.frontEndCalculateIsValidMedian.toString()}</b></Typography>
+                            
                                                 </Box>
                                             }>
-                                                <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(el, assessment) })}>
+                                                <TableRow key={assessment.id} sx={() => ({ bgcolor: GetBg(assessment) })}>
                                                     <TableCell size='small' sx={{ pl: 6 }}>{assessment.owner}</TableCell>
                                                     <TableCell size='small'>{assessment.parselId}</TableCell>
                                                     <TableCell size='small'>{assessment.propertyType} </TableCell>
@@ -142,6 +167,8 @@ const PropertyAssessments = () => {
                                                     <TableCell size='small'>-</TableCell>
                                                     <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
                                                     <TableCell size='small'>{formatter.format(assessment.lastSalesPrice / Number(assessment.acrage))}</TableCell>
+                                                    <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatesIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
+                                                    <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatesIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
                                                     <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
                                                     <TableCell size='small'>{moment(el.dateCreated).format('MM-DD-YYYY hh:mm A')}</TableCell>
                                                     <TableCell size='small'>- </TableCell>
