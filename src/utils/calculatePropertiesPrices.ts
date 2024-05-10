@@ -64,7 +64,10 @@ export const calculatePropertyPrice = (property: IPropertyAssessment) => {
     const validPrices =  property.assessments.filter(el => el.isValid).map(el => calcPricePerAcre(el.lastSalesPrice, el.acrage)).sort((a,b) => a - b)
     data.frontEndCalculateIQR = IQRCalculation(validPrices)
     // @ts-ignore
-    data.assessments = data.assessments.map(el => ({...el, frontEndCalculatesIsValidIQR: calcPricePerAcre(el.lastSalesPrice, el.acrage) > data.frontEndCalculateIQR.IQRLowerBound && calcPricePerAcre(el.lastSalesPrice, el.acrage) < data.frontEndCalculateIQR.IQRUpperBound}))
+    data.assessments = data.assessments.map(el => ({...el, 
+        frontEndCalculatesIsValidIQR: el.isValid && (calcPricePerAcre(el.lastSalesPrice, el.acrage) > data.frontEndCalculateIQR.IQRLowerBound && calcPricePerAcre(el.lastSalesPrice, el.acrage) < data.frontEndCalculateIQR.IQRUpperBound)
+    }
+    ))
     // data.assessments.map(el => console.log(calcPricePerAcre(el.lastSalesPrice, el.acrage), data.frontEndCalculateIQR.IQRLowerBound , data.frontEndCalculateIQR.IQRUpperBound))
     return data
 }
