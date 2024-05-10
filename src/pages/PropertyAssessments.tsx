@@ -166,7 +166,7 @@ const PropertyAssessments = () => {
                                                     <TableCell size='small'>{assessment.acrage}</TableCell>
                                                     <TableCell size='small'>-</TableCell>
                                                     <TableCell size='small'>{formatter.format(assessment.lastSalesPrice)}</TableCell>
-                                                    <TableCell size='small'>{formatter.format(assessment.lastSalesPrice / Number(assessment.acrage))}</TableCell>
+                                                    <TableCell size='small'>{formatter.format(Number(assessment.lastSalesPrice) / Number(assessment.acrage))}</TableCell>
                                                     <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatesIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
                                                     <TableCell size='small' sx={theme => ({bgcolor: assessment.frontEndCalculatesIsValidIQR ? 'blue' : ''})}>N/A</TableCell>
                                                     <TableCell size='small'>{assessment.lastSalesDate ? moment(assessment.lastSalesDate).format('MM-DD-YYYY') : '-'}</TableCell>
