@@ -22,8 +22,6 @@ function arrayMedian(numbers: number[]) {
 
 const IQRCalculation = (arr: number[]) => {
     const array = [...arr]
-    console.log(array);
-    
     const q1 = arrayMedian(array.slice(0, array.length / 2))
     const q2 = arrayMedian(array.length % 2 === 0 ?  array.slice(array.length / 2) : array.slice((array.length / 2) + 1))
     const IQR = q2 - q1
@@ -43,6 +41,14 @@ const IQRCalculation = (arr: number[]) => {
 const isValidIQR = (assesment: IPropertyAssessment['assessments'][0], frontEndCalculatedIQR: IPropertyAssessment['frontEndCalculatedIQR']) => !!(assesment.isValid && (calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) > frontEndCalculatedIQR.IQRLowerBound && calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) < frontEndCalculatedIQR.IQRUpperBound))
 
 const medianCalculation = (arr: number[]) => {
+    if(!arr.length) {
+        return {
+            median: 0,
+            lowerMedian: 0,
+            upperMedian: 0,
+            averagePrice: 0
+        }
+    }
     const array = [...arr]
     const median = toFixed2(array[Math.floor(array.length / 2)])
     const lowerMedian = toFixed2(median / 2)
