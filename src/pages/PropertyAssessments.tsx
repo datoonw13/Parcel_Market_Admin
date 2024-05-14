@@ -3,9 +3,9 @@ import moment from 'moment';
 import React, { useRef, useState, Fragment, useEffect } from 'react'
 
 import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material'
-import { Box, Card, Table, styled, Tooltip, TableRow, Container, TableBody, TableCell, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses } from '@mui/material'
+import { Box, Card, Table, styled, Tooltip, TableRow, Container, TableBody, TableCell, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses, TextField } from '@mui/material'
 
-import { calcPricePerAcre } from 'src/utils/calculatePropertiesPrices';
+import { calcPricePerAcre, calculatePropertyPrice } from 'src/utils/calculatePropertiesPrices';
 
 import { IPropertyAssessment } from 'src/@types/property';
 import { useGetPropertiesAssessmentsQuery } from 'src/lib/features/apis/propertyApi';
@@ -62,6 +62,8 @@ const PropertyAssessments = () => {
     const { data, isSuccess } = useGetPropertiesAssessmentsQuery({ page: table.page + 1, pageSize: table.rowsPerPage, search: null })
     const notFound = isSuccess && data?.data.properties.length === 0;
     const [openItemId, setOpenItemId] = useState<number | null>(null)
+    const [median, setMedian] = useState(3)
+    const [list, setList] = useState<IPropertyAssessment[] | null>(null)
 
     // const handleSearch = (value: string) => {
     //     if (ref.current) {
@@ -83,7 +85,12 @@ const PropertyAssessments = () => {
         }
     }, [])
 
-    console.log(data?.data)
+    useEffect(() => {
+        if(typeof median === 'number' && data?.data.properties) {
+            setList(data.data.properties.map(el => calculatePropertyPrice(el, median)))
+        }
+    }, [median, data?.data.properties])
+    
     return (
         <Container maxWidth={settings.themeStretch ? false : 'xl'}>
             <CustomBreadcrumbs
@@ -93,6 +100,7 @@ const PropertyAssessments = () => {
                     mb: { xs: 3, md: 5 },
                 }}
             />
+             <TextField label="Median" variant='outlined' fullWidth focused value={median} onChange={e => setMedian(Number(e.target.value))} />
             <Card>
                 <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
                     <Scrollbar>
@@ -102,7 +110,7 @@ const PropertyAssessments = () => {
                                 rowCount={data?.data.properties.length || 0}
                             />
                             <TableBody>
-                                {data?.data.properties.map(el =>
+                                {list?.map(el =>
                                     <Fragment key={el.id} >
                                       
                                         
@@ -116,7 +124,7 @@ const PropertyAssessments = () => {
                                                 <Box>
                                                     <Typography>Median: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.median)}</b></Typography>
                                                     <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.lowerMedian)}</b></Typography>
-                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.upperMedian)}</b></Typography>
+                                                    <Typography>Median * {median}: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.upperMedian)}</b></Typography>
                                                     <Typography>Average Price: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.averagePrice)}</b></Typography>
                                                 </Box>
                                             }>
@@ -126,7 +134,7 @@ const PropertyAssessments = () => {
                                                 <Box>
                                                     <Typography>Median: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.median)}</b></Typography>
                                                     <Typography>Median / 2 : <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.lowerMedian)}</b></Typography>
-                                                    <Typography>Median * 5: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.upperMedian)}</b></Typography>
+                                                    <Typography>Median * {median}: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.upperMedian)}</b></Typography>
                                                     <Typography>Average Price: <b style={{ marginLeft: 10 }}>{formatter.format(el.frontEndCalculatedMedian.averagePrice)}</b></Typography>
                                                 </Box>
                                             }>

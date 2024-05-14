@@ -40,7 +40,7 @@ const IQRCalculation = (arr: number[]) => {
 
 const isValidIQR = (assesment: IPropertyAssessment['assessments'][0], frontEndCalculatedIQR: IPropertyAssessment['frontEndCalculatedIQR']) => !!(assesment.isValid && (calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) > frontEndCalculatedIQR.IQRLowerBound && calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) < frontEndCalculatedIQR.IQRUpperBound))
 
-const medianCalculation = (arr: number[]) => {
+const medianCalculation = (arr: number[], maxMedianNum: number) => {
     if(!arr.length) {
         return {
             median: 0,
@@ -52,7 +52,7 @@ const medianCalculation = (arr: number[]) => {
     const array = [...arr]
     const median = toFixed2(array[Math.floor(array.length / 2)])
     const lowerMedian = toFixed2(median / 2)
-    const upperMedian = toFixed2(median  * 5)
+    const upperMedian = toFixed2(median  * maxMedianNum)
     const filteredArray = array.filter(el => el > lowerMedian && el < upperMedian)
     return {
         median,
@@ -66,13 +66,13 @@ const medianCalculation = (arr: number[]) => {
 const isValidMedian = (assesment: IPropertyAssessment['assessments'][0], frontEndCalculatedMedian: IPropertyAssessment['frontEndCalculatedMedian']) => !!(assesment.isValid && (calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) > frontEndCalculatedMedian.lowerMedian && calcPricePerAcre(assesment.lastSalesPrice, assesment.acrage) < frontEndCalculatedMedian.upperMedian))
 
 
-export const calculatePropertyPrice = (property: IPropertyAssessment) => {
+export const calculatePropertyPrice = (property: IPropertyAssessment, maxMedianNum: number) => {
     const data = {
         ...property, 
     }
     const validPrices =  property.assessments.filter(el => el.isValid).map(el => calcPricePerAcre(el.lastSalesPrice, el.acrage)).sort((a,b) => a - b)
-    const IQR =IQRCalculation(validPrices)
-    const median =medianCalculation(validPrices)
+    const IQR = IQRCalculation(validPrices)
+    const median = medianCalculation(validPrices, maxMedianNum)
     data.frontEndCalculatedIQR =  IQR
     data.frontEndCalculatedMedian =  median
     data.assessments = data.assessments.map(el => ({...el, 
