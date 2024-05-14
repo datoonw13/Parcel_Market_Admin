@@ -15,6 +15,9 @@ const baseQuery = fetchBaseQuery({
 export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) => (action: any) => {
   if (action.type.includes("rejected")) {
     let errorMessage = "Something went wrong";
+    if(action.payload.status === 401) {
+      return next(action)
+    }
     if (typeof action?.payload?.data?.message === "string") {
       errorMessage = action?.payload?.data?.message;
     }

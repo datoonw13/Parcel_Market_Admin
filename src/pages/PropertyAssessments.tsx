@@ -3,7 +3,9 @@ import moment from 'moment';
 import React, { useRef, useState, Fragment, useEffect } from 'react'
 
 import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material'
-import { Box, Card, Table, Stack, styled, Tooltip, TableRow, Container, TableBody, TableCell, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses } from '@mui/material'
+import { Box, Card, Table, styled, Tooltip, TableRow, Container, TableBody, TableCell, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses } from '@mui/material'
+
+import { calcPricePerAcre } from 'src/utils/calculatePropertiesPrices';
 
 import { IPropertyAssessment } from 'src/@types/property';
 import { useGetPropertiesAssessmentsQuery } from 'src/lib/features/apis/propertyApi';
@@ -12,7 +14,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
-import { calcPricePerAcre } from 'src/utils/calculatePropertiesPrices';
 
 const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
