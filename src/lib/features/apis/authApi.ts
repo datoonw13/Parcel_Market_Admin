@@ -15,7 +15,7 @@ const authApi = api.injectEndpoints({
         body: arg,
       }),
     }),
-    getUser: build.query<ResponseType<IUser>, void>({
+    getUser: build.query<IUser, void>({
       query: (arg) => ({
         url: "admin/user/profile",
         method: "GET",

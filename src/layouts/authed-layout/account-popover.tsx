@@ -52,18 +52,18 @@ export default function AccountPopover() {
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {authedUser?.data.firstName[0]}
+          {authedUser?.firstName[0]}
         </Avatar>
       </IconButton>
 
       <CustomPopover open={open} onClose={() => setOpen(null)} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {`${authedUser?.data.firstName} ${authedUser?.data.lastName}`}
+            {`${authedUser?.firstName} ${authedUser?.lastName}`}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {`${authedUser?.data.firstName} ${authedUser?.data.lastName}`}
+          {`${authedUser?.firstName} ${authedUser?.lastName}`}
           </Typography>
         </Box>
 
