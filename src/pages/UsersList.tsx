@@ -27,7 +27,7 @@ const UsersList = () => {
     const [search, setSearch] = useState<string | null>(null)
     const table = useTable();
     const { data, isSuccess } = useGetUsersQuery({ page: table.page + 1, pageSize: table.rowsPerPage, search })
-    const notFound = isSuccess && data?.data.users.length === 0;
+    const notFound = isSuccess && data?.data?.length === 0;
 
     const handleSearch = (value: string) => {
         if (ref.current) {
@@ -44,7 +44,6 @@ const UsersList = () => {
             window.clearTimeout(ref.current)
         }
     }, [])
-
 
     return (
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -75,10 +74,10 @@ const UsersList = () => {
                         <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }} >
                             <TableHeadCustom
                                 headLabel={TABLE_HEAD}
-                                rowCount={data?.data.users.length || 0}
+                                rowCount={data?.data.length || 0}
                             />
                             <TableBody>
-                                {data?.data.users.map(el => <TableRow hover key={el.id}>
+                                {data?.data.map(el => <TableRow hover key={el.id}>
                                     <TableCell>{`${el.firstName} ${el.lastName}`}</TableCell>
                                     <TableCell>{el.email}</TableCell>
                                     <TableCell>{el.role}</TableCell>
@@ -92,7 +91,7 @@ const UsersList = () => {
                     </Scrollbar>
                 </TableContainer>
                 <TablePaginationCustom
-                    count={data?.data?.pagination.totalCount || 0}
+                    count={data?.pagination.totalCount || 0}
                     page={table.page}
                     rowsPerPage={table.rowsPerPage}
                     onPageChange={table.onChangePage}
