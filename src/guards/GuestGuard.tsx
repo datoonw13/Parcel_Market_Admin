@@ -12,7 +12,8 @@ interface IGuestGuard {
 
 const GuestGuard = ({ children, getUserLoading }: IGuestGuard) => {
     const isAuthed = useAppSelector(selectAuthedUser)
-
+    console.log(isAuthed && !getUserLoading, 22);
+    
     if (isAuthed && !getUserLoading) {
         return <Navigate to="/" replace />
     }

@@ -31,4 +31,4 @@ export const {
 } = authApi;
 export default authApi;
 
-export const selectAuthedUser = createSelector(authApi.endpoints.getUser.select(), (res) => res?.data?.data);
+export const selectAuthedUser = createSelector(authApi.endpoints.getUser.select(), (res) => res?.data);
