@@ -79,7 +79,7 @@ const UsersList = () => {
                             />
                             <TableBody>
                                 {data?.data.users.map(el => <TableRow hover key={el.id}>
-                                    <TableCell>{el.name}</TableCell>
+                                    <TableCell>{`${el.firstName} ${el.lastName}`}</TableCell>
                                     <TableCell>{el.email}</TableCell>
                                     <TableCell>{el.role}</TableCell>
                                     <TableCell>{el.county}</TableCell>
