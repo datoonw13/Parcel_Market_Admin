@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useRef, useState, Fragment, useEffect } from 'react'
 
 import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material'
-import { Box, Card, Table, styled, Tooltip, TableRow, Container, TableBody, TableCell, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses, TextField } from '@mui/material'
+import { Box, Card, Table, styled, Tooltip, TableRow, Container, TableBody, TableCell, TextField, IconButton, Typography, TooltipProps, TableContainer, tooltipClasses } from '@mui/material'
 
 import { calcPricePerAcre, calculatePropertyPrice } from 'src/utils/calculatePropertiesPrices';
 

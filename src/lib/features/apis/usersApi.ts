@@ -1,5 +1,5 @@
 import { IUser } from "src/@types/users";
-import { IPagination, ResponseType } from "src/@types/common";
+import { IPagination } from "src/@types/common";
 
 import api from "./baseApi";
 
