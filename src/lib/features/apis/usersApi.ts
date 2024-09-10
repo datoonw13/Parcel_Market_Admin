@@ -16,10 +16,18 @@ const usersApi = api.injectEndpoints({
         },
       }),
     }),
+    getEmails: build.query({
+      query: (arg: void) => ({
+        url: "admin/download/email-subscriptions",
+        method: "GET",
+        responseHandler: async (response) => window.location.assign(window.URL.createObjectURL(await response.blob())),
+      }),
+    }),
   }),
 });
 
 export const {
-  useGetUsersQuery
+  useGetUsersQuery,
+  useLazyGetEmailsQuery
 } = usersApi;
 export default usersApi;

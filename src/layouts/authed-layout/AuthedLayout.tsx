@@ -52,7 +52,7 @@ export default function DashboardLayout({ children }: Props) {
                 <Header onOpenNav={() => setOpen(true)} />
 
                 {lgUp ? renderHorizontal : renderNavVertical}
-
+                    
                 <Main>{children}</Main>
             </>
         );
@@ -91,7 +91,7 @@ export default function DashboardLayout({ children }: Props) {
                 }}
             >
                 {renderNavVertical}
-
+                    
                 <Main>{children}</Main>
             </Box>
         </>

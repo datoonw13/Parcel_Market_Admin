@@ -4,13 +4,17 @@ import { useLocation } from 'react-router';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
+import { Download } from '@mui/icons-material';
 
 import { useResponsive } from 'src/hooks/use-responsive';
+
+import { useLazyGetEmailsQuery } from 'src/lib/features/apis/usersApi';
 
 import Scrollbar from 'src/components/scrollbar';
 import { NAV } from 'src/components/config-layout';
 import MainLogo from 'src/components/logo/MainLogo';
 import { NavSectionVertical } from 'src/components/nav-section';
+import NavItem from 'src/components/nav-section/vertical/nav-item';
 
 import { useNavData } from './config-navigation';
 import NavToggleButton from './nav-toggle-button';
@@ -23,6 +27,13 @@ type Props = {
 };
 
 export default function NavVertical({ openNav, onCloseNav }: Props) {
+  const [downloadEmails] = useLazyGetEmailsQuery()
+
+  const handleDownload = async () => {
+    const res = await downloadEmails()
+    console.log(res);
+    
+  }
 
   const { pathname } = useLocation();
 
@@ -53,6 +64,27 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
       <NavSectionVertical
         data={navData}
       />
+         <NavItem
+        // open={openMenu}
+        onClick={(e) => {
+          e.preventDefault()
+          handleDownload()
+        }}
+        //
+        title="Download Emails"
+        path=""
+        icon={<Download />}
+        //
+        depth={0}
+        hasChild={false}
+        sx={{mx: 2, py: 1}}
+        //
+        // sx={{
+        //   mb: `${slotProps?.gap}px`,
+        //   ...(depth === 1 ? slotProps?.rootItem : slotProps?.subItem),
+        // }}
+      />
+
 
       <Box sx={{ flexGrow: 1 }} />
 
