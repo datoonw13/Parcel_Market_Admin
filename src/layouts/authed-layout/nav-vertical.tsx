@@ -8,7 +8,7 @@ import { Download } from '@mui/icons-material';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useLazyGetEmailsQuery } from 'src/lib/features/apis/usersApi';
+import { useLazyGetEmailsQuery, useLazyGetFeedbacksQuery } from 'src/lib/features/apis/usersApi';
 
 import Scrollbar from 'src/components/scrollbar';
 import { NAV } from 'src/components/config-layout';
@@ -28,11 +28,14 @@ type Props = {
 
 export default function NavVertical({ openNav, onCloseNav }: Props) {
   const [downloadEmails] = useLazyGetEmailsQuery()
+  const [downloadFeedbacks] = useLazyGetFeedbacksQuery()
 
-  const handleDownload = async () => {
+  const handleDownloadEmails = async () => {
     const res = await downloadEmails()
-    console.log(res);
-    
+  }
+
+  const handleDownloadFeedbacks = async () => {
+    const res = await downloadFeedbacks()
   }
 
   const { pathname } = useLocation();
@@ -65,10 +68,9 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         data={navData}
       />
          <NavItem
-        // open={openMenu}
         onClick={(e) => {
           e.preventDefault()
-          handleDownload()
+          handleDownloadEmails()
         }}
         //
         title="Download Emails"
@@ -78,11 +80,20 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         depth={0}
         hasChild={false}
         sx={{mx: 2, py: 1}}
+      />
+          <NavItem
+        onClick={(e) => {
+          e.preventDefault()
+          handleDownloadFeedbacks()
+        }}
         //
-        // sx={{
-        //   mb: `${slotProps?.gap}px`,
-        //   ...(depth === 1 ? slotProps?.rootItem : slotProps?.subItem),
-        // }}
+        title="Download Feedbacks"
+        path=""
+        icon={<Download />}
+        //
+        depth={0}
+        hasChild={false}
+        sx={{mx: 2, py: 1}}
       />
 
 

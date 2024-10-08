@@ -23,11 +23,19 @@ const usersApi = api.injectEndpoints({
         responseHandler: async (response) => window.location.assign(window.URL.createObjectURL(await response.blob())),
       }),
     }),
+    getFeedbacks: build.query({
+      query: (arg: void) => ({
+        url: "admin/download/feedback",
+        method: "GET",
+        responseHandler: async (response) => window.location.assign(window.URL.createObjectURL(await response.blob())),
+      }),
+    }),
   }),
 });
 
 export const {
   useGetUsersQuery,
-  useLazyGetEmailsQuery
+  useLazyGetEmailsQuery,
+  useLazyGetFeedbacksQuery
 } = usersApi;
 export default usersApi;
