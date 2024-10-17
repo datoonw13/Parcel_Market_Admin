@@ -30,12 +30,20 @@ const usersApi = api.injectEndpoints({
         responseHandler: async (response) => window.location.assign(window.URL.createObjectURL(await response.blob())),
       }),
     }),
+    activateFreeTrial: build.mutation<any, {email: string, expiresInDays: number}>({
+      query: (arg) => ({
+        url: "free-access-codes/user/activate-subscription",
+        method: "POST",
+        body: arg,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetUsersQuery,
   useLazyGetEmailsQuery,
-  useLazyGetFeedbacksQuery
+  useLazyGetFeedbacksQuery,
+  useActivateFreeTrialMutation
 } = usersApi;
 export default usersApi;
