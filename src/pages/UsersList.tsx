@@ -106,7 +106,7 @@ const UsersList = () => {
       }}>
         <DialogTitle>Activate Free Trial</DialogTitle>
         <DialogContent>
-          <TextField label="Free trial period" sx={{ my: 2 }} value={expires || ''} onChange={e => setExpires(Number(e.target.value))} />
+          <TextField label="Free trial days" sx={{ my: 2 }} value={expires || ''} onChange={e => setExpires(Number(e.target.value))} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setUserEmail('')}>Close</Button>
