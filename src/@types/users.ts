@@ -7,5 +7,7 @@ export interface IUser {
     county: string,
     state: string,
     mailingAddress: string
-    image: string | null
+    image: string | null,
+    dateCreated: Date,
+    subscriptionType: string;
 }

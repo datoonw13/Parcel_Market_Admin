@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useRef, useState, useEffect } from "react";
 
 import { LoadingButton } from "@mui/lab";
@@ -48,6 +49,8 @@ const TABLE_HEAD = [
   { id: "county", label: "county", width: 220 },
   { id: "state", label: "state", width: 180 },
   { id: "mailingAddress", label: "mailingAddress", width: 100 },
+  { id: "Subscription", label: "Subscription", width: 100 },
+  { id: "Created At", label: "Created At", width: 100 },
   { id: "options", label: "", width: 100 },
 ];
 
@@ -68,7 +71,7 @@ const UsersList = () => {
   const [activate, { isLoading }] = useActivateFreeTrialMutation();
   const [expires, setExpires] = useState(NaN);
   const notFound = isSuccess && data?.data?.length === 0;
-
+  console.log(data)
   const handleSearch = (value: string) => {
     if (ref.current) {
       window.clearTimeout(ref.current);
@@ -164,6 +167,8 @@ const UsersList = () => {
                       <TableCell>{el.county}</TableCell>
                       <TableCell>{el.state}</TableCell>
                       <TableCell>{el.mailingAddress}</TableCell>
+                      <TableCell>{el.subscriptionType}</TableCell>
+                      <TableCell>{moment(el.dateCreated).format('MM/DD/YYYY')}</TableCell>
                       <TableCell>
                         <IconButton
                           onClick={(e) => {
