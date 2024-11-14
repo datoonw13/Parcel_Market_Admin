@@ -50,6 +50,7 @@ const TABLE_HEAD = [
   { id: "state", label: "state", width: 180 },
   { id: "mailingAddress", label: "mailingAddress", width: 100 },
   { id: "Subscription", label: "Subscription", width: 100 },
+  { id: "registrationReason", label: "Registration Reason", width: 100 },
   { id: "Created At", label: "Created At", width: 100 },
   { id: "options", label: "", width: 100 },
 ];
@@ -168,6 +169,7 @@ const UsersList = () => {
                       <TableCell>{el.state}</TableCell>
                       <TableCell>{el.mailingAddress}</TableCell>
                       <TableCell>{el.subscriptionType}</TableCell>
+                      <TableCell>{el.registrationReasons.join(',')}</TableCell>
                       <TableCell>{moment(el.dateCreated).format('MM/DD/YYYY')}</TableCell>
                       <TableCell>
                         <IconButton
