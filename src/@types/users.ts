@@ -11,5 +11,5 @@ export interface IUser {
     dateCreated: Date,
     subscriptionType: string;
     registrationReasons: string[];
-    referrer: string;
+    source: string;
 }
