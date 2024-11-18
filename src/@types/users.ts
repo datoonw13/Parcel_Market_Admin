@@ -10,5 +10,6 @@ export interface IUser {
     image: string | null,
     dateCreated: Date,
     subscriptionType: string;
-    registrationReasons: string[]
+    registrationReasons: string[];
+    referrer: string;
 }

@@ -45,6 +45,7 @@ import {
 const TABLE_HEAD = [
   { id: "name", label: "Name" },
   { id: "email", label: "Email" },
+  { id: "Referrer", label: "Referrer" },
   { id: "role", label: "role", width: 180 },
   { id: "county", label: "county", width: 220 },
   { id: "state", label: "state", width: 180 },
@@ -164,6 +165,7 @@ const UsersList = () => {
                     <TableRow hover key={el.id}>
                       <TableCell>{`${el.firstName} ${el.lastName}`}</TableCell>
                       <TableCell>{el.email}</TableCell>
+                      <TableCell>{el?.referrer}</TableCell>
                       <TableCell>{el.role}</TableCell>
                       <TableCell>{el.county}</TableCell>
                       <TableCell>{el.state}</TableCell>
