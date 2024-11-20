@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import SnackbarUtils from 'src/utils/snackbar'
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://api.parcelmarket.com/api/",
+  baseUrl: import.meta.env.VITE_API_URL,
   prepareHeaders: async (headers) => {
     headers.set("authorization", `Bearer ${localStorage.getItem("token")}`);
     return headers;
