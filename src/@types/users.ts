@@ -12,4 +12,6 @@ export interface IUser {
     subscriptionType: string;
     registrationReasons: string[];
     source: string;
+    searchesCount: number;
+    lastSearchDate: Date;
 }

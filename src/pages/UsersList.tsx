@@ -47,9 +47,10 @@ const TABLE_HEAD = [
   { id: "email", label: "Email" },
   { id: "Source", label: "Source" },
   { id: "role", label: "role", width: 180 },
-  { id: "county", label: "county", width: 220 },
+  // { id: "county", label: "county", width: 220 },
   { id: "state", label: "state", width: 180 },
-  { id: "mailingAddress", label: "mailingAddress", width: 100 },
+  { id: "searchCount", label: "Total Searches", width: 100 },
+  { id: "lastSearchDate", label: "Last Search Date", width: 100 },
   { id: "Subscription", label: "Subscription", width: 100 },
   { id: "registrationReason", label: "Registration Reason", width: 100 },
   { id: "Created At", label: "Created At", width: 100 },
@@ -167,9 +168,11 @@ const UsersList = () => {
                       <TableCell>{el.email}</TableCell>
                       <TableCell>{el?.source}</TableCell>
                       <TableCell>{el.role}</TableCell>
-                      <TableCell>{el.county}</TableCell>
+                      {/* <TableCell>{el.county}</TableCell> */}
                       <TableCell>{el.state}</TableCell>
-                      <TableCell>{el.mailingAddress}</TableCell>
+                      {/* <TableCell>{el.mailingAddress}</TableCell> */}
+                      <TableCell>{el.searchesCount}</TableCell>
+                      <TableCell>{moment(el.lastSearchDate).format('MM/DD/YYYY')}</TableCell>
                       <TableCell>{el.subscriptionType}</TableCell>
                       <TableCell>{el.registrationReasons.join(',')}</TableCell>
                       <TableCell>{moment(el.dateCreated).format('MM/DD/YYYY')}</TableCell>
