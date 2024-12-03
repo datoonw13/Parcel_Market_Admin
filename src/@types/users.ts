@@ -14,4 +14,5 @@ export interface IUser {
     source: string;
     searchesCount: number;
     lastSearchDate: Date;
+    isGoogleUser?: boolean
 }

@@ -45,6 +45,7 @@ import {
 const TABLE_HEAD = [
   { id: "name", label: "Name" },
   { id: "email", label: "Email" },
+  { id: "IsGoogle", label: "Google Registration" },
   { id: "Source", label: "Source" },
   { id: "role", label: "role", width: 180 },
   // { id: "county", label: "county", width: 220 },
@@ -166,6 +167,7 @@ const UsersList = () => {
                     <TableRow hover key={el.id}>
                       <TableCell>{`${el.firstName} ${el.lastName}`}</TableCell>
                       <TableCell>{el.email}</TableCell>
+                      <TableCell>{el?.isGoogleUser ? 'Yes' : "no"}</TableCell>
                       <TableCell>{el?.source}</TableCell>
                       <TableCell>{el.role}</TableCell>
                       {/* <TableCell>{el.county}</TableCell> */}
