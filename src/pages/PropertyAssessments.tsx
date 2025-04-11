@@ -47,7 +47,7 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
 });
 
 const TABLE_HEAD = [
-  { id: "owner", label: "Owner" },
+  { id: "email", label: "Email" },
   { id: "parcelId", label: "Parcel Id" },
   { id: "propertyType", label: "Property Type" },
   { id: "acrage", label: "Acrage" },
@@ -124,7 +124,7 @@ const PropertyAssessments = () => {
                       hover
                       sx={{ cursor: "pointer" }}
                     >
-                      <TableCell>{el.name_owner}</TableCell>
+                      <TableCell>{el?.user?.email}</TableCell>
                       <TableCell>{el.parcelNumber}</TableCell>
                       <TableCell>{el?.propertyType || "-"}</TableCell>
                       <TableCell>{el?.acrage || "-"}</TableCell>
