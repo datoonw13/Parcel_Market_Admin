@@ -37,6 +37,9 @@ export interface IPropertyAssessment {
         medianLowerBound?: string;
         averagePricePerAcreValidMedians?: string;
         acrage: number,
+        user: {
+                email: string;
+        }
         assessments: Array<{
                 "id": number,
                 "owner": string,
